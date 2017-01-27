@@ -1,0 +1,7 @@
+.idea/
+.byebug_history
+*.gem
+*.log
+spec/integration/apps/rails_app/log
+Gemfile.lock
+coverage
