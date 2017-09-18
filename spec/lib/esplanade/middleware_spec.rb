@@ -123,7 +123,7 @@ RSpec.describe Esplanade::Middleware do
               { 'Content-Type' => 'application/json; charset=utf-8' },
               [
                 "{\"error\":[\"The property '#/' did not contain a required property"\
-                " of 'example' in schema 9edf3679-75e7-5598-b0f6-32c6aecd39cd\"]}"
+                " of 'example' in schema 7c257622-1876-550d-834f-cc53f8b0d662\"]}"
               ]
             ]
           )
@@ -177,8 +177,8 @@ RSpec.describe Esplanade::Middleware do
                 '500',
                 { 'Content-Type' => 'application/json; charset=utf-8' },
                 [
-                  "{\"error\":[\"The property '#/' of type String did not match the following"\
-                  ' type: object in schema 9edf3679-75e7-5598-b0f6-32c6aecd39cd"]}'
+                  "{\"error\":[\"The property '#/' of type string did not match the following"\
+                  ' type: object in schema 7c257622-1876-550d-834f-cc53f8b0d662"]}'
                 ]
               ]
             )
