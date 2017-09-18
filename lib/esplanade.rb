@@ -7,7 +7,7 @@ require 'esplanade/response'
 require 'esplanade/response/body'
 require 'esplanade/response/error'
 require 'esplanade/railtie' if defined?(Rails)
-require 'tomogram_routing'
+require 'tomograph'
 
 module Esplanade
   class << self
