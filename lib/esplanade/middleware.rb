@@ -7,7 +7,11 @@ module Esplanade
 
     def initialize(app)
       @app = app
-      @tomogram = TomogramRouting::Tomogram.craft(Esplanade.configuration.tomogram)
+      @tomogram = Tomograph::Tomogram.new(
+        prefix: Esplanade.configuration.prefix,
+        apib_path: Esplanade.configuration.apib_path,
+        drafter_yaml_path: Esplanade.configuration.drafter_yaml_path
+      )
     end
 
     def call(env)

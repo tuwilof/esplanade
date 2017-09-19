@@ -4,7 +4,7 @@ RSpec.describe Esplanade do
   context 'if not default' do
     it 'makes settings' do
       Esplanade.configure do |config|
-        config.tomogram = 'doc/api.yaml'
+        config.drafter_yaml_path = 'doc/api.yaml'
       end
     end
   end

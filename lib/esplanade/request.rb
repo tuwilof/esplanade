@@ -17,7 +17,7 @@ module Esplanade
     end
 
     def error
-      JSON::Validator.fully_validate(@schema['request'], @body)
+      JSON::Validator.fully_validate(@schema.request, @body)
     end
 
     def valid!
