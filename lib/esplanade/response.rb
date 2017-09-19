@@ -8,10 +8,10 @@ module Esplanade
     class NotDocumented < RuntimeError; end
 
     def initialize(status, body, expect_request)
-      return unless Esplanade.configuration.validation_response && expect_request
+      return unless Esplanade.configuration.validation_response && expect_request.schema
       @status = status
       @body = Body.craft(body)
-      @schemas = expect_request.find_responses(status: @status)
+      @schemas = expect_request.schema.find_responses(status: @status)
       raise NotDocumented unless (@schemas&.first) || Esplanade.configuration.skip_not_documented
       self
     end
