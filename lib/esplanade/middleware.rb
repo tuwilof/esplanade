@@ -14,9 +14,7 @@ module Esplanade
     end
 
     def call(env)
-      request = Esplanade::Request.new(env, @tomogram)
       status, headers, body = @app.call(env)
-      response = Esplanade::Response.new(status, body, request)
       [status, headers, body]
     end
   end

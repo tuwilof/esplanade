@@ -7,7 +7,6 @@ module Esplanade
                   :validation_requests,
                   :validation_response
 
-
     def initialize
       @prefix = ''
       @skip_not_documented = true
