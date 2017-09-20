@@ -1,4 +1,6 @@
-require 'yaml'
+require 'tomograph'
+require 'esplanade/request'
+require 'esplanade/response'
 
 module Esplanade
   class Middleware
