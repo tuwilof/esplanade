@@ -12,7 +12,7 @@ module Esplanade
     end
 
     def body
-      @body ||= Body.craft(@raw_body)
+      @body ||= Esplanade::Response::Body.craft(@raw_body)
     end
 
     def schemas

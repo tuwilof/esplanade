@@ -17,7 +17,7 @@ module Esplanade
     end
 
     def body
-      @body ||= Body.craft(@env)
+      @body ||= Esplanade::Request::Body.craft(@env)
     end
 
     def schema
