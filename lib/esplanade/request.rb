@@ -20,16 +20,20 @@ module Esplanade
       @body ||= Esplanade::Request::Body.craft(@env)
     end
 
-    def schema
+    def request_tomogram
       @schema ||= @tomogram.find_request(method: method, path: path)
     end
 
+    def json_schema
+      @json_schema ||= request_tomogram.request
+    end
+
     def error
-      @error ||= JSON::Validator.fully_validate(schema.request, body)
+      @error ||= JSON::Validator.fully_validate(json_schema, body)
     end
 
     def documented?
-      @documented ||= !schema.nil?
+      @documented ||= !request_tomogram.nil?
     end
 
     def valid?

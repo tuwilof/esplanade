@@ -28,11 +28,19 @@ RSpec.describe Esplanade::Request do
     it { expect(subject.body).to eq(body) }
   end
 
-  describe '#schema' do
-    let(:schema) { double }
-    let(:tomogram) { double(find_request: schema) }
+  describe '#request_tomogram' do
+    let(:request_tomogram) { double }
+    let(:tomogram) { double(find_request: request_tomogram) }
 
-    it { expect(subject.schema).to eq(schema) }
+    it { expect(subject.request_tomogram).to eq(request_tomogram) }
+  end
+
+  describe '#json_schema' do
+    let(:json_schema) { double }
+
+    before { allow(subject).to receive(:request_tomogram).and_return(double(request: json_schema)) }
+
+    it { expect(subject.json_schema).to eq(json_schema) }
   end
 
   describe '#error' do
