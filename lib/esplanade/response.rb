@@ -1,38 +1,41 @@
 require 'json-schema'
+require 'esplanade/response/body'
 
 module Esplanade
   class Response
-    attr_accessor :status, :body, :schemas
+    attr_reader :status
 
-    class Unsuitable < RuntimeError; end
-    class NotDocumented < RuntimeError; end
-
-    def initialize(status, body, expect_request)
-      return unless Esplanade.configuration.validation_response && expect_request.schema
+    def initialize(status, raw_body, expect_request)
       @status = status
-      @body = Body.craft(body)
-      @schemas = expect_request.schema.find_responses(status: @status)
-      raise NotDocumented unless (@schemas&.first) || Esplanade.configuration.skip_not_documented
-      self
+      @raw_body = raw_body
+      @expect_request = expect_request
+    end
+
+    def body
+      @body ||= Body.craft(@raw_body)
+    end
+
+    def schemas
+      @schemas ||= @expect_request.schema.find_responses(status: @status)
     end
 
     def error
-      return JSON::Validator.fully_validate(@schemas.first['body'], @body) if @schemas.size == 1
+      return JSON::Validator.fully_validate(schemas.first['body'], body) if schemas.size == 1
 
-      @schemas.each do |action|
-        res = JSON::Validator.fully_validate(action['body'], @body)
+      schemas.each do |action|
+        res = JSON::Validator.fully_validate(action['body'], body)
         return res if res == []
       end
 
       ['invalid']
     end
 
-    def valid!
-      raise Unsuitable, error unless error.empty?
+    def documented?
+      @documented ||= !schemas.nil?
     end
 
-    def validate?
-      @schemas&.first && Esplanade.configuration.validation_response
+    def valid?
+      @valid ||= error == []
     end
   end
 end

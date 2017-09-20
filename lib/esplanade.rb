@@ -2,7 +2,6 @@ require 'esplanade/middleware'
 require 'esplanade/configuration'
 require 'esplanade/request'
 require 'esplanade/response'
-require 'esplanade/response/body'
 require 'esplanade/railtie' if defined?(Rails)
 require 'tomograph'
 
