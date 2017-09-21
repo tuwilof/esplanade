@@ -3,7 +3,7 @@ require 'esplanade/response/body'
 
 module Esplanade
   class Response
-    attr_reader :status
+    attr_reader :status, :request
 
     def initialize(status, raw_body, request)
       @status = status
@@ -16,22 +16,29 @@ module Esplanade
     end
 
     def response_tomograms
-      @schemas ||= request.request_tomogram.find_responses(status: @status)
+      @response_tomograms ||= if @request && @request.request_tomogram
+                                @request.request_tomogram.find_responses(status: @status)
+                              end
     end
 
     def json_schemas
-      @json_schema ||= response_tomograms.map { |action| action['body'] }
+      @json_schemas ||= if response_tomograms
+                          response_tomograms.map { |action| action['body'] }
+                        end
     end
 
     def error
-      return JSON::Validator.fully_validate(json_schemas.first, body) if json_schemas.size == 1
+      return @error if @error
+      return nil unless json_schemas
+      return nil unless body
+      return @error = JSON::Validator.fully_validate(json_schemas.first, body) if json_schemas.size == 1
 
       json_schemas.each do |json_schema|
         res = JSON::Validator.fully_validate(json_schema, body)
-        return res if res == []
+        return @error = res if res == []
       end
 
-      ['invalid']
+      @error = ['invalid']
     end
 
     def documented?

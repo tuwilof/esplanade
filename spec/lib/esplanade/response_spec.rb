@@ -17,13 +17,22 @@ RSpec.describe Esplanade::Response do
 
   describe '#response_tomograms' do
     let(:response_tomograms) { double }
-
-    before do
-      allow(subject).to receive(:request)
-        .and_return(double(request_tomogram: double(find_responses: response_tomograms)))
-    end
+    let(:request_tomogram) { double(find_responses: response_tomograms) }
+    let(:expect_request) { double(request_tomogram: request_tomogram) }
 
     it { expect(subject.response_tomograms).to eq(response_tomograms) }
+
+    context 'no request ' do
+      let(:expect_request) { nil }
+
+      it { expect(subject.response_tomograms).to be_nil }
+    end
+
+    context 'request not documented' do
+      let(:request_tomogram) { nil }
+
+      it { expect(subject.response_tomograms).to be_nil }
+    end
   end
 
   describe '#json_schemas' do
@@ -35,53 +44,67 @@ RSpec.describe Esplanade::Response do
     end
 
     it { expect(subject.json_schemas).to eq([json_schema]) }
+
+    context 'not documented' do
+      before { allow(subject).to receive(:response_tomograms).and_return(nil) }
+
+      it { expect(subject.json_schemas).to be_nil }
+    end
   end
 
   describe '#error' do
-    context 'one schema' do
-      let(:error) { double }
+    let(:json_schemas) { double }
+    let(:body) { double }
+    let(:error) { double }
 
-      before do
-        allow(subject).to receive(:json_schemas).and_return(double(first: {}, size: 1))
-        allow(subject).to receive(:body)
-        allow(JSON::Validator).to receive(:fully_validate).and_return(error)
-      end
+    before do
+      allow(subject).to receive(:json_schemas).and_return(json_schemas)
+      allow(subject).to receive(:body).and_return(body)
+      allow(JSON::Validator).to receive(:fully_validate).and_return(error)
+    end
+
+    context 'one schema' do
+      let(:json_schemas) { double(first: {}, size: 1) }
 
       it { expect(subject.error).to eq(error) }
     end
 
     context 'there is a valid scheme' do
+      let(:json_schemas) { [{}] }
       let(:error) { [] }
-
-      before do
-        allow(subject).to receive(:json_schemas).and_return([{}])
-        allow(subject).to receive(:body)
-        allow(JSON::Validator).to receive(:fully_validate).and_return(error)
-      end
 
       it { expect(subject.error).to eq(error) }
     end
 
     context 'no valid schemes' do
-      before do
-        allow(subject).to receive(:json_schemas).and_return([{}, {}])
-        allow(subject).to receive(:body)
-        allow(JSON::Validator).to receive(:fully_validate).and_return(double)
-      end
+      let(:json_schemas) { [{}, {}] }
+      let(:error) { ['invalid'] }
 
-      it { expect(subject.error).to eq(['invalid']) }
+      it { expect(subject.error).to eq(error) }
     end
 
-    describe '#documented?' do
-      before { allow(subject).to receive(:response_tomograms) }
+    context 'no json-schemas' do
+      let(:json_schemas) { nil }
 
-      it { expect(subject.documented?).to be_falsey }
+      it { expect(subject.error).to be_nil }
     end
 
-    describe '#valid??' do
-      before { allow(subject).to receive(:error) }
+    context 'no body' do
+      let(:body) { nil }
 
-      it { expect(subject.valid?).to be_falsey }
+      it { expect(subject.error).to be_nil }
     end
+  end
+
+  describe '#documented?' do
+    before { allow(subject).to receive(:response_tomograms) }
+
+    it { expect(subject.documented?).to be_falsey }
+  end
+
+  describe '#valid??' do
+    before { allow(subject).to receive(:error) }
+
+    it { expect(subject.valid?).to be_falsey }
   end
 end

@@ -5,6 +5,7 @@ module Esplanade
         private_class_method :new
 
         def craft(body)
+          return nil unless body
           # According to specification Rack http://rack.github.io
           # body can only answer each
           lines = []
