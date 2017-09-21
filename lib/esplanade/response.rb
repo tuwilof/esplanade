@@ -20,7 +20,7 @@ module Esplanade
     end
 
     def json_schemas
-      @json_schema ||= response_tomograms.map{ |action| action['body'] }
+      @json_schema ||= response_tomograms.map { |action| action['body'] }
     end
 
     def error

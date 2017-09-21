@@ -31,7 +31,7 @@ RSpec.describe Esplanade::Response do
 
     before do
       allow(subject).to receive(:response_tomograms)
-        .and_return([{'body' => json_schema}])
+        .and_return([{ 'body' => json_schema }])
     end
 
     it { expect(subject.json_schemas).to eq([json_schema]) }
