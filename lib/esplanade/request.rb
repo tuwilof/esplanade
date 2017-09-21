@@ -21,15 +21,21 @@ module Esplanade
     end
 
     def request_tomogram
-      @schema ||= @tomogram.find_request(method: method, path: path)
+      @request_tomogram ||= if @tomogram
+                              @tomogram.find_request(method: method, path: path)
+                            end
     end
 
     def json_schema
-      @json_schema ||= request_tomogram.request
+      @json_schema ||= if request_tomogram
+                         request_tomogram.request
+                       end
     end
 
     def error
-      @error ||= JSON::Validator.fully_validate(json_schema, body)
+      @error ||= if json_schema
+                   JSON::Validator.fully_validate(json_schema, body)
+                 end
     end
 
     def documented?

@@ -33,6 +33,12 @@ RSpec.describe Esplanade::Request do
     let(:tomogram) { double(find_request: request_tomogram) }
 
     it { expect(subject.request_tomogram).to eq(request_tomogram) }
+
+    context 'no tomogram'  do
+      let(:tomogram) { nil }
+
+      it { expect(subject.request_tomogram).to be_nil }
+    end
   end
 
   describe '#json_schema' do
@@ -41,18 +47,64 @@ RSpec.describe Esplanade::Request do
     before { allow(subject).to receive(:request_tomogram).and_return(double(request: json_schema)) }
 
     it { expect(subject.json_schema).to eq(json_schema) }
+
+    context 'not documented' do
+      before { allow(subject).to receive(:request_tomogram).and_return(nil) }
+
+      it { expect(subject.json_schema).to be_nil }
+    end
   end
 
   describe '#error' do
-    let(:error) { double }
-    let(:tomogram) { double(find_request: double(request: nil)) }
+    let(:body) { { 'a' => 5 } }
+    let(:json_schema) do
+      {
+        'type' => 'object',
+        'required' => ['a'],
+        'properties' => {
+          'a' => { 'type' => 'integer' }
+        }
+      }
+    end
+    let(:error) { [] }
 
     before do
-      allow(Esplanade::Request::Body).to receive(:craft)
-      allow(JSON::Validator).to receive(:fully_validate).and_return(error)
+      allow(subject).to receive(:json_schema).and_return(json_schema)
+      allow(subject).to receive(:body).and_return(body)
     end
 
     it { expect(subject.error).to eq(error) }
+
+    context 'invalid body' do
+      let(:body) { {} }
+      let(:error) do
+        [
+          "The property '#/' did not contain a required property"\
+            " of 'a' in schema 18a1ffbb-4681-5b00-bd15-2c76aee4b28f"
+        ]
+      end
+
+      it { expect(subject.error).to eq(error) }
+    end
+
+    context 'not documented' do
+      let(:json_schema) { nil }
+      let(:error) { nil }
+
+      it { expect(subject.error).to eq(error) }
+    end
+
+    context 'no body' do
+      let(:body) { nil }
+      let(:error) do
+        [
+          "The property '#/' of type null did not match the following type:"\
+            ' object in schema 18a1ffbb-4681-5b00-bd15-2c76aee4b28f'
+        ]
+      end
+
+      it { expect(subject.error).to eq(error) }
+    end
   end
 
   describe '#documented?' do
@@ -62,14 +114,27 @@ RSpec.describe Esplanade::Request do
   end
 
   describe '#valid??' do
-    let(:error) { double }
-    let(:tomogram) { double(find_request: double(request: nil)) }
+    let(:error) { [] }
 
-    before do
-      allow(Esplanade::Request::Body).to receive(:craft)
-      allow(JSON::Validator).to receive(:fully_validate).and_return(error)
+    before { allow(subject).to receive(:error).and_return(error) }
+
+    it { expect(subject.valid?).to be_truthy }
+
+    context 'invalid' do
+      let(:error) do
+        [
+          "The property '#/' did not contain a required property"\
+            " of 'a' in schema 18a1ffbb-4681-5b00-bd15-2c76aee4b28f"
+        ]
+      end
+
+      it { expect(subject.valid?).to be_falsey }
     end
 
-    it { expect(subject.valid?).to be_falsey }
+    context 'not error' do
+      let(:error) { nil }
+
+      it { expect(subject.valid?).to be_falsey }
+    end
   end
 end
