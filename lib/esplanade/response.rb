@@ -30,6 +30,7 @@ module Esplanade
     def error
       return @error if @error
       return nil unless json_schemas
+      return nil if json_schemas == []
       return nil unless body
       return @error = JSON::Validator.fully_validate(json_schemas.first, body) if json_schemas.size == 1
 
@@ -42,7 +43,7 @@ module Esplanade
     end
 
     def documented?
-      @documented ||= !response_tomograms.nil?
+      @documented ||= response_tomograms != [] && !response_tomograms.nil?
     end
 
     def valid?

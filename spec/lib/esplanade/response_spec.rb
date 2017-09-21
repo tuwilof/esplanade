@@ -33,6 +33,12 @@ RSpec.describe Esplanade::Response do
 
       it { expect(subject.response_tomograms).to be_nil }
     end
+
+    context 'response not documented' do
+      let(:request_tomogram) { double(find_responses: []) }
+
+      it { expect(subject.response_tomograms).to eq([]) }
+    end
   end
 
   describe '#json_schemas' do
@@ -45,10 +51,16 @@ RSpec.describe Esplanade::Response do
 
     it { expect(subject.json_schemas).to eq([json_schema]) }
 
-    context 'not documented' do
+    context 'request not documented' do
       before { allow(subject).to receive(:response_tomograms).and_return(nil) }
 
       it { expect(subject.json_schemas).to be_nil }
+    end
+
+    context 'response not documented' do
+      before { allow(subject).to receive(:response_tomograms).and_return([]) }
+
+      it { expect(subject.json_schemas).to eq([]) }
     end
   end
 
@@ -85,6 +97,12 @@ RSpec.describe Esplanade::Response do
 
     context 'no json-schemas' do
       let(:json_schemas) { nil }
+
+      it { expect(subject.error).to be_nil }
+    end
+
+    context 'empty json-schemas' do
+      let(:json_schemas) { [] }
 
       it { expect(subject.error).to be_nil }
     end
