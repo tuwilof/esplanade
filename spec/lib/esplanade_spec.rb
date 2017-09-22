@@ -17,7 +17,7 @@ RSpec.describe Esplanade do
 
     it 'makes settings' do
       Esplanade.configure do |config|
-        config.skip_not_documented = false
+        config.prefix = '/api/v1'
       end
     end
   end
