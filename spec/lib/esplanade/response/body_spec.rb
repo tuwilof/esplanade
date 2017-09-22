@@ -18,5 +18,10 @@ RSpec.describe Esplanade::Response::Body do
       let(:body) { ['{"state": 1'] }
       it { expect(subject).to eq('{"state": 1') }
     end
+
+    context 'body nil' do
+      let(:body) { nil }
+      it { expect(subject).to be_nil }
+    end
   end
 end

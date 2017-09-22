@@ -4,6 +4,8 @@ module Esplanade
       private_class_method :new
 
       def self.craft(env)
+        return nil unless env
+        return nil unless env['rack.input']
         params_string = env['rack.input'].read
         params_hash = {}
         params_hash = MultiJson.load(params_string) unless params_string == ''

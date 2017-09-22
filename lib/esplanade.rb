@@ -1,13 +1,5 @@
 require 'esplanade/middleware'
 require 'esplanade/configuration'
-require 'esplanade/request'
-require 'esplanade/request/body'
-require 'esplanade/request/error'
-require 'esplanade/response'
-require 'esplanade/response/body'
-require 'esplanade/response/error'
-require 'esplanade/railtie' if defined?(Rails)
-require 'tomograph'
 
 module Esplanade
   class << self
