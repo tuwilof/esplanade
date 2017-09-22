@@ -12,7 +12,7 @@ module Esplanade
     end
 
     def body
-      @body ||= Esplanade::Response::Body.craft(@raw_body)
+      @body ||= Esplanade::Response::Body.new(@raw_body)
     end
 
     def response_tomograms
@@ -32,10 +32,11 @@ module Esplanade
       return nil unless json_schemas
       return nil if json_schemas == []
       return nil unless body
-      return @error = JSON::Validator.fully_validate(json_schemas.first, body) if json_schemas.size == 1
+      return nil unless body.to_h
+      return @error = JSON::Validator.fully_validate(json_schemas.first, body.to_h) if json_schemas.size == 1
 
       json_schemas.each do |json_schema|
-        res = JSON::Validator.fully_validate(json_schema, body)
+        res = JSON::Validator.fully_validate(json_schema, body.to_h)
         return @error = res if res == []
       end
 

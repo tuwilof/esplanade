@@ -10,7 +10,7 @@ RSpec.describe Esplanade::Response do
   describe '#body' do
     let(:body) { double }
 
-    before { allow(Esplanade::Response::Body).to receive(:craft).and_return(body) }
+    before { allow(Esplanade::Response::Body).to receive(:new).and_return(body) }
 
     it { expect(subject.body).to eq(body) }
   end
@@ -71,7 +71,7 @@ RSpec.describe Esplanade::Response do
 
     before do
       allow(subject).to receive(:json_schemas).and_return(json_schemas)
-      allow(subject).to receive(:body).and_return(body)
+      allow(subject).to receive(:body).and_return(double(to_h: body))
       allow(JSON::Validator).to receive(:fully_validate).and_return(error)
     end
 
