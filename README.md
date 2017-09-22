@@ -1,22 +1,5 @@
 # Esplanade
 
-This gem helps you validate the request and response documentation API Blueprint.
-
-
-If the request to the server will be invalid tomogram, it will return a response with a 400 status and the body of the error.
-If the server's response will be invalid tomogram, it will return a response with 500 status and the body of the error.
-
-An example of an error body
-
-```ruby
-{
-  "error": [
-      "The property '#/' did not contain a required property of 'login' in schema deee53ed-f917-5f2f-bccf-0b8af3b749c7",
-      "The property '#/' did not contain a required property of 'password' in schema deee53ed-f917-5f2f-bccf-0b8af3b749c7"
-    ]
-}
-```
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -35,48 +18,51 @@ Or install it yourself as:
 
 ## Usage
 
-### Rails
-
 config/application.rb
 
 ```ruby
 require 'esplanade'
+config.middleware.use YourMiddleware
 ```
 
-### Rake
-
-config/application.rb
-
+Example:
 ```ruby
-require 'esplanade'
-config.middleware.use Esplanade::Middleware
+class YourMiddleware < Esplanade::Middleware
+  def call(env)
+    request = Esplanade::Request.new(env, @tomogram)
+    check_request(request)
+    status, headers, body = @app.call(env)
+    response = Esplanade::Response.new(status, body, request)
+    check_response(response)
+    [status, headers, body]
+  end
+
+  def check_request(request)
+    return not_documented_request(request) unless request.documented?
+    invalid_request(request) unless request.valid?
+  end
+
+  def check_response(response)
+    return unless response.request.documented?
+    return not_documented_response(response) unless response.documented?
+    invalid_response(response) unless response.valid?
+  end
+end
 ```
 
 ## Config
 
-### tomogram
+### apib_path
 
-This gem takes a simplified format json convert from API Blueprint which we have called API Tomogram.
+Path to API Blueprint documentation. There must be an installed [drafter](https://github.com/apiaryio/drafter) to parse it.
 
-If in your project you are using the gem tomograph, then define the configuration you are not required.
+### drafter_yaml_path
 
-```ruby
-Esplanade.configure do |config|
-  config.tomogram = 'tomogram.json'
-end
-```
+Path to API Blueprint documentation pre-parsed with `drafter` and saved to a YAML file.
 
-### skip_not_documented
+### prefix
 
-Default true.
-
-### validation_requests
-
-Default true.
-
-### validation_response
-
-Default true.
+Prefix of API requests. Example: `'/api'`. Validation will not be performed if the request path does not start with a prefix.
 
 ## License
 
