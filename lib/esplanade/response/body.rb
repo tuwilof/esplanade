@@ -7,7 +7,7 @@ module Esplanade
 
       def to_s
         @to_s ||= begin
-                    @body.inject([]) { |lines, line| lines.push(line) }.join('\n')
+                    @body.join
                   rescue
                     ''
                   end
