@@ -17,7 +17,7 @@ module Esplanade
     end
 
     def body
-      @body ||= Esplanade::Request::Body.craft(@env)
+      @body ||= Esplanade::Request::Body.new(@env)
     end
 
     def request_tomogram
@@ -34,7 +34,7 @@ module Esplanade
 
     def error
       @error ||= if json_schema
-                   JSON::Validator.fully_validate(json_schema, body)
+                   JSON::Validator.fully_validate(json_schema, body.to_h)
                  end
     end
 

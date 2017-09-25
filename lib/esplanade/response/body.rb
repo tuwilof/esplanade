@@ -1,31 +1,39 @@
 module Esplanade
   class Response
-    class Body < Hash
-      class << self
-        private_class_method :new
+    class Body
+      def initialize(body)
+        @body = body
+      end
 
-        def craft(body)
-          return nil unless body
-          # According to specification Rack http://rack.github.io
-          # body can only answer each
-          lines = []
-          body.each { |line| lines.push(line) }
-          lines_to_json(lines)
+      def to_s
+        @to_s ||= string_and_received[0]
+      end
+
+      def to_h
+        @to_h ||= hash_and_parsed[0]
+      end
+
+      def received?
+        @received ||= string_and_received[1]
+      end
+
+      def parsed?
+        @parsed ||= hash_and_parsed[1]
+      end
+
+      def string_and_received
+        @string_and_received ||= begin
+          [@body.join, true]
+        rescue
+          ['', false]
         end
+      end
 
-        private
-
-        def lines_to_json(lines)
-          if lines.join.empty?
-            {}
-          else
-            res = lines.join('\n')
-            begin
-              MultiJson.load(res)
-            rescue MultiJson::ParseError
-              res
-            end
-          end
+      def hash_and_parsed
+        @hash_and_parsed ||= begin
+          [MultiJson.load(to_s), true]
+        rescue MultiJson::ParseError
+          [{}, false]
         end
       end
     end

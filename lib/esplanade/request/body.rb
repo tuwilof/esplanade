@@ -1,15 +1,40 @@
 module Esplanade
   class Request
-    class Body < Hash
-      private_class_method :new
+    class Body
+      def initialize(env)
+        @env = env
+      end
 
-      def self.craft(env)
-        return nil unless env
-        return nil unless env['rack.input']
-        params_string = env['rack.input'].read
-        params_hash = {}
-        params_hash = MultiJson.load(params_string) unless params_string == ''
-        new.merge(params_hash)
+      def to_s
+        @to_s ||= string_and_received[0]
+      end
+
+      def to_h
+        @to_h ||= hash_and_parsed[0]
+      end
+
+      def received?
+        @received ||= string_and_received[1]
+      end
+
+      def parsed?
+        @parsed ||= hash_and_parsed[1]
+      end
+
+      def string_and_received
+        @string_and_received ||= begin
+          [@env['rack.input'].read, true]
+        rescue
+          ['', false]
+        end
+      end
+
+      def hash_and_parsed
+        @hash_and_parsed ||= begin
+          [MultiJson.load(to_s), true]
+        rescue MultiJson::ParseError
+          [{}, false]
+        end
       end
     end
   end
