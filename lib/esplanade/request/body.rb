@@ -6,10 +6,26 @@ module Esplanade
       end
 
       def to_s
-        @to_s ||= begin
-          @env['rack.input'].read
+        @to_s ||= string_and_received[0]
+      end
+
+      def to_h
+        @to_h ||= hash_and_parsed[0]
+      end
+
+      def received?
+        @received ||= string_and_received[1]
+      end
+
+      def parsed?
+        @parsed ||= hash_and_parsed[1]
+      end
+
+      def string_and_received
+        @string_and_received ||= begin
+          [@env['rack.input'].read, true]
         rescue
-          ''
+          ['', false]
         end
       end
 
@@ -19,14 +35,6 @@ module Esplanade
         rescue MultiJson::ParseError
           [{}, false]
         end
-      end
-
-      def to_h
-        @to_h ||= hash_and_parsed[0]
-      end
-
-      def parsed?
-        @parsed ||= hash_and_parsed[1]
       end
     end
   end
