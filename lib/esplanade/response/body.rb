@@ -1,24 +1,32 @@
 module Esplanade
   class Response
-    class Body < Hash
+    class Body
       def initialize(body)
         @body = body
       end
 
       def to_s
-        @to_s ||= begin
-                    @body.join
-                  rescue
-                    ''
-                  end
+        @to_s ||= string_and_received[0]
       end
 
       def to_h
         @to_h ||= hash_and_parsed[0]
       end
 
+      def received?
+        @received ||= string_and_received[1]
+      end
+
       def parsed?
         @parsed ||= hash_and_parsed[1]
+      end
+
+      def string_and_received
+        @string_and_received ||= begin
+          [@body.join, true]
+        rescue
+          ['', false]
+        end
       end
 
       def hash_and_parsed
