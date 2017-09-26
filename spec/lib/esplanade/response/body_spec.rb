@@ -16,7 +16,7 @@ RSpec.describe Esplanade::Response::Body do
   describe '#to_h' do
     let(:hash) { double }
 
-    before { allow(subject).to receive(:hash_and_parsed).and_return([hash]) }
+    before { allow(subject).to receive(:hash_and_json).and_return([hash]) }
 
     it { expect(subject.to_h).to eq(hash) }
   end
@@ -29,12 +29,12 @@ RSpec.describe Esplanade::Response::Body do
     it { expect(subject.received?).to eq(received) }
   end
 
-  describe '#parsed?' do
-    let(:parsed) { double }
+  describe '#json?' do
+    let(:json) { double }
 
-    before { allow(subject).to receive(:hash_and_parsed).and_return([double, parsed]) }
+    before { allow(subject).to receive(:hash_and_json).and_return([double, json]) }
 
-    it { expect(subject.parsed?).to eq(parsed) }
+    it { expect(subject.json?).to eq(json) }
   end
 
   describe '#string_and_received' do
@@ -48,16 +48,16 @@ RSpec.describe Esplanade::Response::Body do
     end
   end
 
-  describe '#hash_and_parsed' do
+  describe '#hash_and_json' do
     let(:to_s) { '{"state": 1}' }
 
     before { allow(subject).to receive(:to_s).and_return(to_s) }
 
-    it { expect(subject.hash_and_parsed).to eq([{ 'state' => 1 }, true]) }
+    it { expect(subject.hash_and_json).to eq([{ 'state' => 1 }, true]) }
 
     context 'invalid' do
       let(:to_s) { '{"state": 1' }
-      it { expect(subject.hash_and_parsed).to eq([{}, false]) }
+      it { expect(subject.hash_and_json).to eq([{}, false]) }
     end
   end
 end
