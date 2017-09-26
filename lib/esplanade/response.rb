@@ -15,15 +15,15 @@ module Esplanade
       @body ||= Esplanade::Response::Body.new(@raw_body)
     end
 
-    def response_tomograms
-      @response_tomograms ||= if @request && @request.request_tomogram
-                                @request.request_tomogram.find_responses(status: @status)
-                              end
+    def documentation
+      @documentation ||= if @request && @request.documentation
+                           @request.documentation.find_responses(status: @status)
+                         end
     end
 
     def json_schemas
-      @json_schemas ||= if response_tomograms
-                          response_tomograms.map { |action| action['body'] }
+      @json_schemas ||= if documentation
+                          documentation.map { |action| action['body'] }
                         end
     end
 
@@ -44,7 +44,7 @@ module Esplanade
     end
 
     def documented?
-      @documented ||= response_tomograms != [] && !response_tomograms.nil?
+      @documented ||= documentation != [] && !documentation.nil?
     end
 
     def valid?

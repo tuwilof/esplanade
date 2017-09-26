@@ -28,28 +28,28 @@ RSpec.describe Esplanade::Request do
     it { expect(subject.body).to eq(body) }
   end
 
-  describe '#request_tomogram' do
-    let(:request_tomogram) { double }
-    let(:tomogram) { double(find_request: request_tomogram) }
+  describe '#documentation' do
+    let(:documentation) { double }
+    let(:tomogram) { double(find_request: documentation) }
 
-    it { expect(subject.request_tomogram).to eq(request_tomogram) }
+    it { expect(subject.documentation).to eq(documentation) }
 
     context 'no tomogram'  do
       let(:tomogram) { nil }
 
-      it { expect(subject.request_tomogram).to be_nil }
+      it { expect(subject.documentation).to be_nil }
     end
   end
 
   describe '#json_schema' do
     let(:json_schema) { double }
 
-    before { allow(subject).to receive(:request_tomogram).and_return(double(request: json_schema)) }
+    before { allow(subject).to receive(:documentation).and_return(double(request: json_schema)) }
 
     it { expect(subject.json_schema).to eq(json_schema) }
 
     context 'not documented' do
-      before { allow(subject).to receive(:request_tomogram).and_return(nil) }
+      before { allow(subject).to receive(:documentation).and_return(nil) }
 
       it { expect(subject.json_schema).to be_nil }
     end
