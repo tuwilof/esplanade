@@ -1,5 +1,7 @@
 # Esplanade
 
+[![Build Status](https://travis-ci.org/funbox/esplanade.svg?branch=master)](https://travis-ci.org/funbox/esplanade)
+
 ## Installation
 
 Add this line to your application's Gemfile:
