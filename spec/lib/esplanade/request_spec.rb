@@ -113,6 +113,26 @@ RSpec.describe Esplanade::Request do
     it { expect(subject.documented?).to be_falsey }
   end
 
+  describe '#has_json_schema?' do
+    before { allow(subject).to receive(:json_schema).and_return(double) }
+
+    it { expect(subject.has_json_schema?).to be_truthy }
+
+    context 'does not have json-schema' do
+      before { allow(subject).to receive(:json_schema).and_return({}) }
+
+      it { expect(subject.has_json_schema?).to be_falsey }
+    end
+  end
+
+  describe '#body_json?' do
+    let(:json) { double }
+
+    before { allow(subject).to receive(:body).and_return(double(json?: json)) }
+
+    it { expect(subject.body_json?).to eq(json) }
+  end
+
   describe '#valid??' do
     let(:error) { [] }
 

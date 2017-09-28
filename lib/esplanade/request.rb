@@ -42,6 +42,14 @@ module Esplanade
       @documented ||= !documentation.nil?
     end
 
+    def has_json_schema?
+      @has_json_schema ||= json_schema != {}
+    end
+
+    def body_json?
+      body.json?
+    end
+
     def valid?
       @valid ||= error == []
     end
