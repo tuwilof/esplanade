@@ -3,9 +3,9 @@ require 'esplanade/request/body'
 
 module Esplanade
   class Request
-    def initialize(env, tomogram)
+    def initialize(env, main_documentation)
       @env = env
-      @tomogram = tomogram
+      @main_documentation = main_documentation
     end
 
     def method
@@ -20,15 +20,15 @@ module Esplanade
       @body ||= Esplanade::Request::Body.new(@env)
     end
 
-    def request_tomogram
-      @request_tomogram ||= if @tomogram
-                              @tomogram.find_request(method: method, path: path)
-                            end
+    def documentation
+      @documentation ||= if @main_documentation
+                           @main_documentation.find_request(method: method, path: path)
+                         end
     end
 
     def json_schema
-      @json_schema ||= if request_tomogram
-                         request_tomogram.request
+      @json_schema ||= if documentation
+                         documentation.request
                        end
     end
 
@@ -39,7 +39,15 @@ module Esplanade
     end
 
     def documented?
-      @documented ||= !request_tomogram.nil?
+      @documented ||= !documentation.nil?
+    end
+
+    def has_json_schema?
+      @has_json_schema ||= json_schema != {}
+    end
+
+    def body_json?
+      body.json?
     end
 
     def valid?

@@ -15,29 +15,29 @@ RSpec.describe Esplanade::Response do
     it { expect(subject.body).to eq(body) }
   end
 
-  describe '#response_tomograms' do
-    let(:response_tomograms) { double }
-    let(:request_tomogram) { double(find_responses: response_tomograms) }
-    let(:expect_request) { double(request_tomogram: request_tomogram) }
+  describe '#documentation' do
+    let(:response_documentation) { double }
+    let(:request_documentation) { double(find_responses: response_documentation) }
+    let(:expect_request) { double(documentation: request_documentation) }
 
-    it { expect(subject.response_tomograms).to eq(response_tomograms) }
+    it { expect(subject.documentation).to eq(response_documentation) }
 
     context 'no request ' do
       let(:expect_request) { nil }
 
-      it { expect(subject.response_tomograms).to be_nil }
+      it { expect(subject.documentation).to be_nil }
     end
 
     context 'request not documented' do
-      let(:request_tomogram) { nil }
+      let(:request_documentation) { nil }
 
-      it { expect(subject.response_tomograms).to be_nil }
+      it { expect(subject.documentation).to be_nil }
     end
 
     context 'response not documented' do
-      let(:request_tomogram) { double(find_responses: []) }
+      let(:request_documentation) { double(find_responses: []) }
 
-      it { expect(subject.response_tomograms).to eq([]) }
+      it { expect(subject.documentation).to eq([]) }
     end
   end
 
@@ -45,20 +45,20 @@ RSpec.describe Esplanade::Response do
     let(:json_schema) { double }
 
     before do
-      allow(subject).to receive(:response_tomograms)
+      allow(subject).to receive(:documentation)
         .and_return([{ 'body' => json_schema }])
     end
 
     it { expect(subject.json_schemas).to eq([json_schema]) }
 
     context 'request not documented' do
-      before { allow(subject).to receive(:response_tomograms).and_return(nil) }
+      before { allow(subject).to receive(:documentation).and_return(nil) }
 
       it { expect(subject.json_schemas).to be_nil }
     end
 
     context 'response not documented' do
-      before { allow(subject).to receive(:response_tomograms).and_return([]) }
+      before { allow(subject).to receive(:documentation).and_return([]) }
 
       it { expect(subject.json_schemas).to eq([]) }
     end
@@ -115,9 +115,29 @@ RSpec.describe Esplanade::Response do
   end
 
   describe '#documented?' do
-    before { allow(subject).to receive(:response_tomograms) }
+    before { allow(subject).to receive(:documentation) }
 
     it { expect(subject.documented?).to be_falsey }
+  end
+
+  describe '#has_json_schemas?' do
+    before { allow(subject).to receive(:json_schemas).and_return([double, double]) }
+
+    it { expect(subject.has_json_schemas?).to be_truthy }
+
+    context 'does not have json-schemas' do
+      before { allow(subject).to receive(:json_schemas).and_return([double, {}]) }
+
+      it { expect(subject.has_json_schemas?).to be_falsey }
+    end
+  end
+
+  describe '#body_json?' do
+    let(:json) { double }
+
+    before { allow(subject).to receive(:body).and_return(double(json?: json)) }
+
+    it { expect(subject.body_json?).to eq(json) }
   end
 
   describe '#valid??' do
