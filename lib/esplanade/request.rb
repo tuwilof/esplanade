@@ -1,5 +1,6 @@
 require 'json-schema'
 require 'esplanade/request/raw'
+require 'esplanade/request/doc'
 
 module Esplanade
   class Request
@@ -12,30 +13,22 @@ module Esplanade
       Esplanade::Request::Raw.new(@env)
     end
 
-    def documentation
-      @documentation ||= if @main_documentation
-                           @main_documentation.find_request(method: raw.method, path: raw.path)
-                         end
-    end
-
-    def json_schema
-      @json_schema ||= if documentation
-                         documentation.request
-                       end
+    def doc
+      Esplanade::Request::Doc.new(@main_documentation, raw)
     end
 
     def error
-      @error ||= if json_schema
-                   JSON::Validator.fully_validate(json_schema, raw.body.to_h)
+      @error ||= if doc.json_schema
+                   JSON::Validator.fully_validate(doc.json_schema, raw.body.to_h)
                  end
     end
 
     def documented?
-      @documented ||= !documentation.nil?
+      @documented ||= !doc.tomogram.nil?
     end
 
     def has_json_schema?
-      @has_json_schema ||= json_schema != {}
+      @has_json_schema ||= doc.json_schema != {}
     end
 
     def body_json?
