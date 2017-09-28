@@ -6,28 +6,6 @@ RSpec.describe Esplanade::Request do
   let(:env) { {} }
   let(:tomogram) { double }
 
-  describe '#method' do
-    let(:method) { double }
-    let(:env) { { 'REQUEST_METHOD' => method } }
-
-    it { expect(subject.method).to eq(method) }
-  end
-
-  describe '#path' do
-    let(:path) { double }
-    let(:env) { { 'PATH_INFO' => path } }
-
-    it { expect(subject.path).to eq(path) }
-  end
-
-  describe '#body' do
-    let(:body) { double }
-
-    before { allow(Esplanade::Request::Body).to receive(:new).and_return(body) }
-
-    it { expect(subject.body).to eq(body) }
-  end
-
   describe '#documentation' do
     let(:documentation) { double }
     let(:tomogram) { double(find_request: documentation) }
@@ -70,7 +48,7 @@ RSpec.describe Esplanade::Request do
 
     before do
       allow(subject).to receive(:json_schema).and_return(json_schema)
-      allow(subject).to receive(:body).and_return(double(to_h: body))
+      allow(subject).to receive(:raw).and_return(double(body: (double(to_h: body))))
     end
 
     it { expect(subject.error).to eq(error) }
@@ -128,7 +106,7 @@ RSpec.describe Esplanade::Request do
   describe '#body_json?' do
     let(:json) { double }
 
-    before { allow(subject).to receive(:body).and_return(double(json?: json)) }
+    before { allow(subject).to receive(:raw).and_return(double(body: double(json?: json))) }
 
     it { expect(subject.body_json?).to eq(json) }
   end

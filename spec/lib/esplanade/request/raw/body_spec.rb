@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Esplanade::Request::Body do
+RSpec.describe Esplanade::Request::Raw::Body do
   subject { described_class.new(env) }
 
   let(:env) { double }
