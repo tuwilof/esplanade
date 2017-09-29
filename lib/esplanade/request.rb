@@ -1,6 +1,6 @@
-require 'json-schema'
 require 'esplanade/request/raw'
 require 'esplanade/request/doc'
+require 'esplanade/request/validation'
 
 module Esplanade
   class Request
@@ -17,10 +17,8 @@ module Esplanade
       @doc ||= Esplanade::Request::Doc.new(@main_documentation, raw)
     end
 
-    def error
-      @error ||= if doc.json_schema
-                   JSON::Validator.fully_validate(doc.json_schema, raw.body.to_h)
-                 end
+    def validation
+      @validation || Esplanade::Request::Validation.new(raw, doc)
     end
 
     def documented?
@@ -33,10 +31,6 @@ module Esplanade
 
     def body_json?
       raw.body.json?
-    end
-
-    def valid?
-      @valid ||= error == []
     end
   end
 end
