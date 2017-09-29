@@ -1,5 +1,6 @@
 require 'json-schema'
 require 'esplanade/response/raw'
+require 'esplanade/response/doc'
 
 module Esplanade
   class Response
@@ -15,27 +16,19 @@ module Esplanade
       @raw ||= Esplanade::Response::Raw.new(@status, @raw_body)
     end
 
-    def documentation
-      @documentation ||= if @request && @request.documentation
-                           @request.documentation.find_responses(status: @status)
-                         end
-    end
-
-    def json_schemas
-      @json_schemas ||= if documentation
-                          documentation.map { |action| action['body'] }
-                        end
+    def doc
+      @doc ||= Esplanade::Response::Doc.new(@status, @request)
     end
 
     def error
       return @error if @error
-      return nil unless json_schemas
-      return nil if json_schemas == []
+      return nil unless doc.json_schemas
+      return nil if doc.json_schemas == []
       return nil unless raw.body
       return nil unless raw.body.to_h
-      return @error = JSON::Validator.fully_validate(json_schemas.first, raw.body.to_h) if json_schemas.size == 1
+      return @error = JSON::Validator.fully_validate(doc.json_schemas.first, raw.body.to_h) if doc.json_schemas.size == 1
 
-      json_schemas.each do |json_schema|
+      doc.json_schemas.each do |json_schema|
         res = JSON::Validator.fully_validate(json_schema, raw.body.to_h)
         return @error = res if res == []
       end
@@ -44,11 +37,11 @@ module Esplanade
     end
 
     def documented?
-      @documented ||= documentation != [] && !documentation.nil?
+      @documented ||= doc.tomogram != [] && !doc.tomogram.nil?
     end
 
     def has_json_schemas?
-      @has_json_schemas ||= json_schemas.all? { |json_schema| json_schema != {} }
+      @has_json_schemas ||= doc.json_schemas.all? { |json_schema| json_schema != {} }
     end
 
     def body_json?

@@ -10,11 +10,11 @@ module Esplanade
     end
 
     def raw
-      Esplanade::Request::Raw.new(@env)
+      @raw ||= Esplanade::Request::Raw.new(@env)
     end
 
     def doc
-      Esplanade::Request::Doc.new(@main_documentation, raw)
+      @doc ||= Esplanade::Request::Doc.new(@main_documentation, raw)
     end
 
     def error

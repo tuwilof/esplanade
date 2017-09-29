@@ -7,62 +7,13 @@ RSpec.describe Esplanade::Response do
   let(:raw_body) { double }
   let(:expect_request) { double }
 
-  describe '#documentation' do
-    let(:response_documentation) { double }
-    let(:request_documentation) { double(find_responses: response_documentation) }
-    let(:expect_request) { double(documentation: request_documentation) }
-
-    it { expect(subject.documentation).to eq(response_documentation) }
-
-    context 'no request ' do
-      let(:expect_request) { nil }
-
-      it { expect(subject.documentation).to be_nil }
-    end
-
-    context 'request not documented' do
-      let(:request_documentation) { nil }
-
-      it { expect(subject.documentation).to be_nil }
-    end
-
-    context 'response not documented' do
-      let(:request_documentation) { double(find_responses: []) }
-
-      it { expect(subject.documentation).to eq([]) }
-    end
-  end
-
-  describe '#json_schemas' do
-    let(:json_schema) { double }
-
-    before do
-      allow(subject).to receive(:documentation)
-        .and_return([{ 'body' => json_schema }])
-    end
-
-    it { expect(subject.json_schemas).to eq([json_schema]) }
-
-    context 'request not documented' do
-      before { allow(subject).to receive(:documentation).and_return(nil) }
-
-      it { expect(subject.json_schemas).to be_nil }
-    end
-
-    context 'response not documented' do
-      before { allow(subject).to receive(:documentation).and_return([]) }
-
-      it { expect(subject.json_schemas).to eq([]) }
-    end
-  end
-
   describe '#error' do
     let(:json_schemas) { double }
     let(:body) { double }
     let(:error) { double }
 
     before do
-      allow(subject).to receive(:json_schemas).and_return(json_schemas)
+      allow(subject).to receive(:doc).and_return(double(json_schemas: json_schemas))
       allow(subject).to receive(:raw).and_return(double(body: double(to_h: body)))
       allow(JSON::Validator).to receive(:fully_validate).and_return(error)
     end
@@ -107,18 +58,18 @@ RSpec.describe Esplanade::Response do
   end
 
   describe '#documented?' do
-    before { allow(subject).to receive(:documentation) }
+    before { allow(subject).to receive(:doc).and_return(double(tomogram: nil)) }
 
     it { expect(subject.documented?).to be_falsey }
   end
 
   describe '#has_json_schemas?' do
-    before { allow(subject).to receive(:json_schemas).and_return([double, double]) }
+    before { allow(subject).to receive(:doc).and_return(double(json_schemas: [double, double])) }
 
     it { expect(subject.has_json_schemas?).to be_truthy }
 
     context 'does not have json-schemas' do
-      before { allow(subject).to receive(:json_schemas).and_return([double, {}]) }
+      before { allow(subject).to receive(:doc).and_return(double(json_schemas: [double, {}])) }
 
       it { expect(subject.has_json_schemas?).to be_falsey }
     end
