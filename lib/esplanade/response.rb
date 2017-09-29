@@ -1,9 +1,10 @@
-require 'json-schema'
-require 'esplanade/response/body'
+require 'esplanade/response/raw'
+require 'esplanade/response/doc'
+require 'esplanade/response/validation'
 
 module Esplanade
   class Response
-    attr_reader :status, :request
+    attr_reader :request
 
     def initialize(status, raw_body, request)
       @status = status
@@ -11,52 +12,16 @@ module Esplanade
       @request = request
     end
 
-    def body
-      @body ||= Esplanade::Response::Body.new(@raw_body)
+    def raw
+      @raw ||= Esplanade::Response::Raw.new(@status, @raw_body)
     end
 
-    def documentation
-      @documentation ||= if @request && @request.documentation
-                           @request.documentation.find_responses(status: @status)
-                         end
+    def doc
+      @doc ||= Esplanade::Response::Doc.new(@status, @request)
     end
 
-    def json_schemas
-      @json_schemas ||= if documentation
-                          documentation.map { |action| action['body'] }
-                        end
-    end
-
-    def error
-      return @error if @error
-      return nil unless json_schemas
-      return nil if json_schemas == []
-      return nil unless body
-      return nil unless body.to_h
-      return @error = JSON::Validator.fully_validate(json_schemas.first, body.to_h) if json_schemas.size == 1
-
-      json_schemas.each do |json_schema|
-        res = JSON::Validator.fully_validate(json_schema, body.to_h)
-        return @error = res if res == []
-      end
-
-      @error = ['invalid']
-    end
-
-    def documented?
-      @documented ||= documentation != [] && !documentation.nil?
-    end
-
-    def has_json_schemas?
-      @has_json_schemas ||= json_schemas.all?{ |json_schema| json_schema != {} }
-    end
-
-    def body_json?
-      body.json?
-    end
-
-    def valid?
-      @valid ||= error == []
+    def validation
+      @validation ||= Esplanade::Response::Validation.new(raw, doc)
     end
   end
 end

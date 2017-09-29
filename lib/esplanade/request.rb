@@ -1,5 +1,6 @@
-require 'json-schema'
-require 'esplanade/request/body'
+require 'esplanade/request/raw'
+require 'esplanade/request/doc'
+require 'esplanade/request/validation'
 
 module Esplanade
   class Request
@@ -8,50 +9,16 @@ module Esplanade
       @main_documentation = main_documentation
     end
 
-    def method
-      @method ||= @env['REQUEST_METHOD']
+    def raw
+      @raw ||= Esplanade::Request::Raw.new(@env)
     end
 
-    def path
-      @path ||= @env['PATH_INFO']
+    def doc
+      @doc ||= Esplanade::Request::Doc.new(@main_documentation, raw)
     end
 
-    def body
-      @body ||= Esplanade::Request::Body.new(@env)
-    end
-
-    def documentation
-      @documentation ||= if @main_documentation
-                           @main_documentation.find_request(method: method, path: path)
-                         end
-    end
-
-    def json_schema
-      @json_schema ||= if documentation
-                         documentation.request
-                       end
-    end
-
-    def error
-      @error ||= if json_schema
-                   JSON::Validator.fully_validate(json_schema, body.to_h)
-                 end
-    end
-
-    def documented?
-      @documented ||= !documentation.nil?
-    end
-
-    def has_json_schema?
-      @has_json_schema ||= json_schema != {}
-    end
-
-    def body_json?
-      body.json?
-    end
-
-    def valid?
-      @valid ||= error == []
+    def validation
+      @validation || Esplanade::Request::Validation.new(raw, doc)
     end
   end
 end
