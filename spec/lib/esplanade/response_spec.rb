@@ -7,14 +7,6 @@ RSpec.describe Esplanade::Response do
   let(:raw_body) { double }
   let(:expect_request) { double }
 
-  describe '#body' do
-    let(:body) { double }
-
-    before { allow(Esplanade::Response::Body).to receive(:new).and_return(body) }
-
-    it { expect(subject.body).to eq(body) }
-  end
-
   describe '#documentation' do
     let(:response_documentation) { double }
     let(:request_documentation) { double(find_responses: response_documentation) }
@@ -71,7 +63,7 @@ RSpec.describe Esplanade::Response do
 
     before do
       allow(subject).to receive(:json_schemas).and_return(json_schemas)
-      allow(subject).to receive(:body).and_return(double(to_h: body))
+      allow(subject).to receive(:raw).and_return(double(body: double(to_h: body)))
       allow(JSON::Validator).to receive(:fully_validate).and_return(error)
     end
 
@@ -135,7 +127,7 @@ RSpec.describe Esplanade::Response do
   describe '#body_json?' do
     let(:json) { double }
 
-    before { allow(subject).to receive(:body).and_return(double(json?: json)) }
+    before { allow(subject).to receive(:raw).and_return(double(body: double(json?: json))) }
 
     it { expect(subject.body_json?).to eq(json) }
   end
