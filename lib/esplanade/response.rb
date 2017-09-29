@@ -1,6 +1,6 @@
-require 'json-schema'
 require 'esplanade/response/raw'
 require 'esplanade/response/doc'
+require 'esplanade/response/validation'
 
 module Esplanade
   class Response
@@ -20,20 +20,8 @@ module Esplanade
       @doc ||= Esplanade::Response::Doc.new(@status, @request)
     end
 
-    def error
-      return @error if @error
-      return nil unless doc.json_schemas
-      return nil if doc.json_schemas == []
-      return nil unless raw.body
-      return nil unless raw.body.to_h
-      return @error = JSON::Validator.fully_validate(doc.json_schemas.first, raw.body.to_h) if doc.json_schemas.size == 1
-
-      doc.json_schemas.each do |json_schema|
-        res = JSON::Validator.fully_validate(json_schema, raw.body.to_h)
-        return @error = res if res == []
-      end
-
-      @error = ['invalid']
+    def validation
+      @validation ||= Esplanade::Response::Validation.new(raw, doc)
     end
 
     def documented?
@@ -46,10 +34,6 @@ module Esplanade
 
     def body_json?
       raw.body.json?
-    end
-
-    def valid?
-      @valid ||= error == []
     end
   end
 end
