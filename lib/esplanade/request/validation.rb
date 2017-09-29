@@ -9,9 +9,9 @@ module Esplanade
       end
 
       def error
-        @error ||= if doc.json_schema
-          JSON::Validator.fully_validate(doc.json_schema, raw.body.to_h)
-        end
+        @error ||= if @doc.json_schema
+                     JSON::Validator.fully_validate(@doc.json_schema, @raw.body.to_h)
+                   end
       end
 
       def valid?

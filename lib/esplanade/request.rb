@@ -20,17 +20,5 @@ module Esplanade
     def validation
       @validation || Esplanade::Request::Validation.new(raw, doc)
     end
-
-    def documented?
-      @documented ||= !doc.tomogram.nil?
-    end
-
-    def has_json_schema?
-      @has_json_schema ||= doc.json_schema != {}
-    end
-
-    def body_json?
-      raw.body.json?
-    end
   end
 end

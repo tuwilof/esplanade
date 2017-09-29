@@ -35,6 +35,14 @@ module Esplanade
                          tomogram.responses
                        end
       end
+
+      def present?
+        @present ||= !tomogram.nil?
+      end
+
+      def json_schema?
+        @has_json_schema ||= json_schema != {}
+      end
     end
   end
 end
