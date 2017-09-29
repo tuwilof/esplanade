@@ -1,14 +1,15 @@
 require 'spec_helper'
 
 RSpec.describe Esplanade::Response::Doc do
-  subject { described_class.new(status, request) }
-  let(:status) { double }
+  subject { described_class.new(raw_status, request) }
+  let(:raw_status) { double }
   let(:request) { double }
 
   describe '#tomogram' do
-    let(:tomogram) { { 'status' => status } }
+    let(:tomogram) { {'status' => status} }
+    let(:status) { double }
     let(:request) { double(doc: double(responses: [tomogram])) }
-
+    before { allow(subject).to receive(:status).and_return(status) }
     it { expect(subject.tomogram).to eq(tomogram) }
 
     context 'does not have responses' do
@@ -19,7 +20,7 @@ RSpec.describe Esplanade::Response::Doc do
 
   describe '#json_schemas' do
     let(:json_schema) { double }
-    before { allow(subject).to receive(:tomogram).and_return([{ 'body' => json_schema }]) }
+    before { allow(subject).to receive(:tomogram).and_return([{'body' => json_schema}]) }
     it { expect(subject.json_schemas).to eq([json_schema]) }
 
     context 'does not have responses' do

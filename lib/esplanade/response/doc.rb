@@ -1,17 +1,19 @@
 module Esplanade
   class Response
     class Doc
-      attr_reader :status
-
-      def initialize(status, request)
-        @status = status
+      def initialize(raw_status, request)
+        @raw_status = raw_status
         @request = request
+      end
+
+      def status
+        @status ||= @raw_status.to_s
       end
 
       def tomogram
         @tomogram ||= if @request.doc.responses
                         @request.doc.responses.find do |response|
-                          response['status'] == @status
+                          response['status'] == status
                         end
                       end
       end
