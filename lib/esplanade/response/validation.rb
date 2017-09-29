@@ -9,23 +9,35 @@ module Esplanade
       end
 
       def error
-        return @error if @error
-        return nil unless @doc.json_schemas
-        return nil if @doc.json_schemas == []
-        return nil unless @raw.body
-        return nil unless @raw.body.to_h
-        return @error = JSON::Validator.fully_validate(@doc.json_schemas.first, @raw.body.to_h) if @doc.json_schemas.size == 1
-
-        @doc.json_schemas.each do |json_schema|
-          res = JSON::Validator.fully_validate(json_schema, @raw.body.to_h)
-          return @error = res if res == []
-        end
-
-        @error = ['invalid']
+        @error ||= if @doc.json_schemas? && @raw.json?
+                     if @doc.json_schemas.size == 1
+                       one_json_schema
+                     else
+                       more_than_one_json_schema
+                     end
+                   end
       end
 
       def valid?
         @valid ||= error == []
+      end
+
+      private
+
+      def one_json_schema
+        JSON::Validator.fully_validate(@doc.json_schemas.first, @raw.body.to_h)
+      end
+
+      def more_than_one_json_schema
+        main_res = @doc.json_schemas.each do |json_schema|
+          res = JSON::Validator.fully_validate(json_schema, @raw.body.to_h)
+          break res if res == []
+        end
+        if main_res != []
+          ['invalid']
+        else
+          []
+        end
       end
     end
   end
