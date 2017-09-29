@@ -24,7 +24,7 @@ RSpec.describe Esplanade::Request do
 
     before do
       allow(subject).to receive(:doc).and_return(double(json_schema: json_schema))
-      allow(subject).to receive(:raw).and_return(double(body: (double(to_h: body))))
+      allow(subject).to receive(:raw).and_return(double(body: double(to_h: body)))
     end
 
     it { expect(subject.error).to eq(error) }

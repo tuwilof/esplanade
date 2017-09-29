@@ -8,32 +8,32 @@ module Esplanade
 
       def tomogram
         @tomogram ||= if @main_documentation
-          @main_documentation.find_request(method: @raw.method, path: @raw.path)
-        end
+                        @main_documentation.find_request(method: @raw.method, path: @raw.path)
+                      end
       end
 
       def json_schema
         @json_schema ||= if tomogram
-          tomogram.request
-        end
+                           tomogram.request
+                         end
       end
 
       def method
         @method ||= if tomogram
-          tomogram.method
-        end
+                      tomogram.method
+                    end
       end
 
       def path
         @path ||= if tomogram
-          tomogram.path.to_s
-        end
+                    tomogram.path.to_s
+                  end
       end
 
       def responses
-        @responses||= if tomogram
-          tomogram.responses
-        end
+        @responses ||= if tomogram
+                         tomogram.responses
+                       end
       end
     end
   end

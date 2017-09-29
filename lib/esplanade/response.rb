@@ -17,14 +17,14 @@ module Esplanade
 
     def documentation
       @documentation ||= if @request && @request.documentation
-        @request.documentation.find_responses(status: @status)
-      end
+                           @request.documentation.find_responses(status: @status)
+                         end
     end
 
     def json_schemas
       @json_schemas ||= if documentation
-        documentation.map { |action| action['body'] }
-      end
+                          documentation.map { |action| action['body'] }
+                        end
     end
 
     def error
