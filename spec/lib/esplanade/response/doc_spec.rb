@@ -5,6 +5,12 @@ RSpec.describe Esplanade::Response::Doc do
   let(:raw_status) { double }
   let(:request) { double }
 
+  describe '#status' do
+    let(:status) { double }
+    let(:raw_status) { double(to_s: status) }
+    it { expect(subject.status).to eq(status) }
+  end
+
   describe '#tomogram' do
     let(:tomogram) { {'status' => status} }
     let(:status) { double }
