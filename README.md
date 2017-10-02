@@ -2,6 +2,11 @@
 
 [![Build Status](https://travis-ci.org/funbox/esplanade.svg?branch=master)](https://travis-ci.org/funbox/esplanade)
 
+This gem will help you validation your API in strict accordance to the documentation in
+[API Blueprint](https://apiblueprint.org/) format.
+To do this, when you run your application, it automatically searches for the corresponding json-schemas in the
+documentation and then validates requests and responses with them.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -20,36 +25,38 @@ Or install it yourself as:
 
 ## Usage
 
-config/application.rb
+For example, analysis using a [Sentry](https://sentry.io/).
+
+`middlewares/sentry_esplanade_middleware.rb`
 
 ```ruby
-require 'esplanade'
-config.middleware.use YourMiddleware
-```
-
-Example:
-```ruby
-class YourMiddleware < Esplanade::Middleware
+class SentryEsplanadeMiddleware < Esplanade::Middleware
   def call(env)
-    request = Esplanade::Request.new(env, @tomogram)
-    check_request(request)
     status, headers, body = @app.call(env)
-    response = Esplanade::Response.new(status, body, request)
-    check_response(response)
+    sentry(Esplanade::Response.new(status, body, Esplanade::Request.new(env, @documentation)))
     [status, headers, body]
   end
 
-  def check_request(request)
-    return not_documented_request(request) unless request.documented?
-    invalid_request(request) unless request.valid?
-  end
-
-  def check_response(response)
-    return unless response.request.documented?
-    return not_documented_response(response) unless response.documented?
-    invalid_response(response) unless response.valid?
+  def sentry(response)
+    response.request.validation.valid!
+    response.validation.valid!
+  rescue Esplanade::Error => e
+    Raven.capture_exception(e)
   end
 end
+```
+
+`config/application.rb`
+
+```ruby
+require 'esplanade'
+
+Esplanade.configure do |config|
+  config.apib_path = 'doc/backend.apib'
+end
+
+require 'middlewares/sentry_esplanade_middleware'
+config.middleware.use SentryEsplanadeMiddleware
 ```
 
 ## Config
@@ -64,7 +71,7 @@ Path to API Blueprint documentation pre-parsed with `drafter` and saved to a YAM
 
 ### prefix
 
-Prefix of API requests. Example: `'/api'`. Validation will not be performed if the request path does not start with a prefix.
+Prefix of API requests. Example: `'/api'`. The prefix is added to the requests in the documentation.
 
 ## License
 
