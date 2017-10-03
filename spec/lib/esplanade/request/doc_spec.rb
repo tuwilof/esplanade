@@ -26,6 +26,11 @@ RSpec.describe Esplanade::Request::Doc do
       before { allow(subject).to receive(:tomogram).and_return(nil) }
       it { expect { subject.json_schema }.to raise_error(Esplanade::DocError) }
     end
+
+    context 'does not have json-schema' do
+      before { allow(subject).to receive(:tomogram).and_return(double(request: {})) }
+      it { expect { subject.json_schema }.to raise_error(Esplanade::RequestDoesNotHaveJsonSchemas) }
+    end
   end
 
   describe '#method' do

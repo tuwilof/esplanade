@@ -6,4 +6,5 @@ module Esplanade
   class CanNotParseBodyOfRequest < Error; end
 
   class DocError < Error; end
+  class RequestDoesNotHaveJsonSchemas < Error; end
 end
