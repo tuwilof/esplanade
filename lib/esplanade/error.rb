@@ -7,8 +7,6 @@ module Esplanade
 
   class RequestNotDocumented        < Error; end
   class DocRequestWithoutJsonSchema < Error; end
-
-  class RequestBodyIsNotJson < Error; end
-
-  class RequestInvalid < Error; end
+  class RequestBodyIsNotJson        < Error; end
+  class RequestInvalid              < Error; end
 end

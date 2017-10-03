@@ -22,8 +22,8 @@ module Esplanade
         @json_schema ||= tomogram.request
         if @json_schema == {}
           raise Esplanade::DocRequestWithoutJsonSchema,
-            method: @raw.method,
-            path: @raw.path
+                method: method,
+                path: path
         end
         @json_schema
       rescue NoMethodError

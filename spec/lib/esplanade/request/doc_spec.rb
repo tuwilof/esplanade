@@ -35,9 +35,12 @@ RSpec.describe Esplanade::Request::Doc do
     end
 
     context 'does not have json-schema' do
-      let(:raw) { double(method: 'method', path: 'path') }
       let(:message) { '{:method=>"method", :path=>"path"}' }
-      before { allow(subject).to receive(:tomogram).and_return(double(request: {})) }
+      before do
+        allow(subject).to receive(:tomogram).and_return(double(request: {}))
+        allow(subject).to receive(:method).and_return('method')
+        allow(subject).to receive(:path).and_return('path')
+      end
       it { expect { subject.json_schema }.to raise_error(Esplanade::DocRequestWithoutJsonSchema, message) }
     end
   end
