@@ -13,7 +13,7 @@ module Esplanade
       end
 
       def body
-        @body ||= Esplanade::Response::Raw::Body.new(@raw_body)
+        @body ||= Esplanade::Response::Raw::Body.new(self, @raw_body)
       end
     end
   end

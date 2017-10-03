@@ -9,4 +9,6 @@ module Esplanade
   class DocRequestWithoutJsonSchema < Error; end
   class RequestBodyIsNotJson        < Error; end
   class RequestInvalid              < Error; end
+
+  class ResponseBodyIsNotJson < Error; end
 end

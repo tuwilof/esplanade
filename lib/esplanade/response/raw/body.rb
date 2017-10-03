@@ -4,7 +4,8 @@ module Esplanade
   class Response
     class Raw
       class Body
-        def initialize(raw_body)
+        def initialize(raw_response, raw_body)
+          @raw_response = raw_response
           @raw_body = raw_body
         end
 
@@ -12,6 +13,14 @@ module Esplanade
           @string ||= @raw_body.first
         rescue NoMethodError
           raise RawResponseError
+        end
+
+        def to_hash
+          @hash ||= MultiJson.load(to_string)
+        rescue MultiJson::ParseError
+          raise ResponseBodyIsNotJson,
+            status: @raw_response.status,
+            body: @raw_response.body.to_string
         end
 
         def to_s
