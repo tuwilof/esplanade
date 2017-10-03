@@ -7,4 +7,5 @@ module Esplanade
 
   class DocError < Error; end
   class RequestDoesNotHaveJsonSchemas < Error; end
+  class RequestNotDocumented < Error; end
 end

@@ -15,6 +15,11 @@ RSpec.describe Esplanade::Request::Doc do
       let(:main_documentation) { nil }
       it { expect { subject.tomogram }.to raise_error(Esplanade::DocError) }
     end
+
+    context 'request not documented' do
+      let(:tomogram) { nil }
+      it { expect{subject.present?}.to raise_error(Esplanade::RequestNotDocumented) }
+    end
   end
 
   describe '#json_schema' do
