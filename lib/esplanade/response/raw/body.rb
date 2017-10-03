@@ -8,6 +8,12 @@ module Esplanade
           @raw_body = raw_body
         end
 
+        def to_string
+          @string ||= @raw_body.first
+        rescue NoMethodError
+          raise RawResponseError
+        end
+
         def to_s
           @to_s ||= string_and_received[0]
         end

@@ -4,6 +4,17 @@ RSpec.describe Esplanade::Response::Raw::Body do
   subject { described_class.new(raw_body) }
   let(:raw_body) { double }
 
+  describe '#to_string' do
+    let(:body) { double }
+    let(:raw_body) { [body] }
+    it { expect(subject.to_string).to eq(body) }
+
+    context 'can not get body of response' do
+      let(:raw_body) { nil }
+      it { expect { subject.to_string }.to raise_error(Esplanade::RawResponseError) }
+    end
+  end
+
   describe '#to_s' do
     let(:string) { double }
     before { allow(subject).to receive(:string_and_received).and_return([string]) }
