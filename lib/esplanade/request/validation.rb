@@ -1,4 +1,5 @@
 require 'json-schema'
+require 'esplanade/error'
 
 module Esplanade
   class Request
@@ -16,6 +17,14 @@ module Esplanade
 
       def valid?
         @valid ||= error == []
+      end
+
+      def valid!
+        return if error! == []
+        raise RequestInvalid, method: @raw.method,
+                              path: @raw.path,
+                              body: @raw.body.to_s,
+                              error: error
       end
     end
   end

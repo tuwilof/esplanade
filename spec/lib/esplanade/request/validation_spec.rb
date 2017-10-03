@@ -28,4 +28,27 @@ RSpec.describe Esplanade::Request::Validation do
       it { expect(subject.valid?).to be_falsey }
     end
   end
+
+  describe '#valid!' do
+    before { allow(subject).to receive(:error).and_return([]) }
+    it { expect(subject.valid!).to be_nil }
+
+    context 'invalid' do
+      let(:raw) { double(method: method, path: path, body: double(to_s: body), error: error) }
+      let(:method) { 'method' }
+      let(:path) { 'path' }
+      let(:body) { 'body' }
+      let(:error) { 'error' }
+
+      before { allow(subject).to receive(:error).and_return(error) }
+
+      it do
+        expect { subject.valid! }
+          .to raise_error(
+            Esplanade::RequestInvalid,
+            "{:method=>\"#{method}\", :path=>\"#{path}\", :body=>\"#{body}\", :error=>\"#{error}\"}"
+          )
+      end
+    end
+  end
 end
