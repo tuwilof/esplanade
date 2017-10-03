@@ -18,7 +18,7 @@ module Esplanade
     end
 
     def validation
-      @validation || Esplanade::Request::Validation.new(raw, doc)
+      @validation || Esplanade::Request::Validation.new(doc, raw)
     end
   end
 end

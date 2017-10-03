@@ -4,9 +4,9 @@ require 'esplanade/error'
 module Esplanade
   class Request
     class Validation
-      def initialize(raw, doc)
-        @raw = raw
+      def initialize(doc, raw)
         @doc = doc
+        @raw = raw
       end
 
       def valid!
