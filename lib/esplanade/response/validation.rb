@@ -25,12 +25,12 @@ module Esplanade
       private
 
       def one_json_schema
-        JSON::Validator.fully_validate(@doc.json_schemas.first, @raw.body.to_h)
+        JSON::Validator.fully_validate(@doc.json_schemas.first, @raw.body.to_hash)
       end
 
       def more_than_one_json_schema
         main_res = @doc.json_schemas.each do |json_schema|
-          res = JSON::Validator.fully_validate(json_schema, @raw.body.to_h)
+          res = JSON::Validator.fully_validate(json_schema, @raw.body.to_hash)
           break res if res == []
         end
         if main_res != []
