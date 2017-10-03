@@ -7,7 +7,7 @@ RSpec.describe Esplanade::Response::Doc do
 
   describe '#status' do
     let(:status) { double }
-    before { allow(subject).to receive(:tomogram).and_return({ 'status' => status }) }
+    before { allow(subject).to receive(:tomogram).and_return('status' => status) }
     it { expect(subject.status).to eq(status) }
   end
 

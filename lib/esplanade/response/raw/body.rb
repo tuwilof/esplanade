@@ -1,9 +1,11 @@
+require 'multi_json'
+
 module Esplanade
   class Response
     class Raw
       class Body
-        def initialize(body)
-          @body = body
+        def initialize(raw_body)
+          @raw_body = raw_body
         end
 
         def to_s
@@ -24,7 +26,7 @@ module Esplanade
 
         def string_and_received
           @string_and_received ||= begin
-            [@body.first, true]
+            [@raw_body.first, true]
           rescue
             ['', false]
           end

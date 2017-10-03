@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Esplanade::Response::Raw::Body do
-  subject { described_class.new(body) }
-  let(:body) { double }
+  subject { described_class.new(raw_body) }
+  let(:raw_body) { double }
 
   describe '#to_s' do
     let(:string) { double }
@@ -29,11 +29,11 @@ RSpec.describe Esplanade::Response::Raw::Body do
   end
 
   describe '#string_and_received' do
-    let(:body) { ['{"state": 1}'] }
+    let(:raw_body) { ['{"state": 1}'] }
     it { expect(subject.string_and_received).to eq(['{"state": 1}', true]) }
 
     context 'invalid' do
-      let(:body) { nil }
+      let(:raw_body) { nil }
       it { expect(subject.string_and_received).to eq(['', false]) }
     end
   end

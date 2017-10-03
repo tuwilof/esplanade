@@ -12,7 +12,6 @@ module Esplanade
         raise Esplanade::RequestNotDocumented,
               method: @raw.method,
               path: @raw.path
-        @tomogram
       rescue NoMethodError
         raise DocError
       end
@@ -23,7 +22,6 @@ module Esplanade
         raise Esplanade::DocRequestWithoutJsonSchema,
               method: method,
               path: path
-        @json_schema
       rescue NoMethodError
         raise DocError
       end
