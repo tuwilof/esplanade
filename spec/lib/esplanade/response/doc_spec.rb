@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 RSpec.describe Esplanade::Response::Doc do
-  subject { described_class.new(raw_status, request) }
-  let(:raw_status) { double }
+  subject { described_class.new(request, raw_status) }
   let(:request) { double }
+  let(:raw_status) { double }
 
   describe '#status' do
     let(:status) { double }

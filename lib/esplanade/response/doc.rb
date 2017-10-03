@@ -1,9 +1,9 @@
 module Esplanade
   class Response
     class Doc
-      def initialize(raw_status, request)
-        @raw_status = raw_status
+      def initialize(request, raw_status)
         @request = request
+        @raw_status = raw_status
       end
 
       def status

@@ -33,7 +33,7 @@ For example, analysis using a [Sentry](https://sentry.io/).
 class SentryEsplanadeMiddleware < Esplanade::Middleware
   def call(env)
     status, headers, body = @app.call(env)
-    sentry(Esplanade::Response.new(status, body, Esplanade::Request.new(env, @documentation)))
+    sentry(Esplanade::Response.new(Esplanade::Request.new(env, @documentation), status, body))
     [status, headers, body]
   end
 

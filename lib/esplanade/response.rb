@@ -6,10 +6,10 @@ module Esplanade
   class Response
     attr_reader :request
 
-    def initialize(status, raw_body, request)
+    def initialize(request, status, raw_body)
+      @request = request
       @status = status
       @raw_body = raw_body
-      @request = request
     end
 
     def raw
@@ -17,7 +17,7 @@ module Esplanade
     end
 
     def doc
-      @doc ||= Esplanade::Response::Doc.new(@status, @request)
+      @doc ||= Esplanade::Response::Doc.new(@request, @status)
     end
 
     def validation
