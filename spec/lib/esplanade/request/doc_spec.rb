@@ -18,7 +18,7 @@ RSpec.describe Esplanade::Request::Doc do
 
     context 'request not documented' do
       let(:tomogram) { nil }
-      it { expect{subject.present?}.to raise_error(Esplanade::RequestNotDocumented) }
+      it { expect { subject.tomogram }.to raise_error(Esplanade::RequestNotDocumented) }
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe Esplanade::Request::Doc do
 
     context 'does not have json-schema' do
       before { allow(subject).to receive(:tomogram).and_return(double(request: {})) }
-      it { expect { subject.json_schema }.to raise_error(Esplanade::RequestDoesNotHaveJsonSchemas) }
+      it { expect { subject.json_schema }.to raise_error(Esplanade::DocRequestWithoutJsonSchema) }
     end
   end
 
@@ -68,26 +68,6 @@ RSpec.describe Esplanade::Request::Doc do
     context 'does not have tomogram' do
       before { allow(subject).to receive(:tomogram).and_return(nil) }
       it { expect { subject.responses }.to raise_error(Esplanade::DocError) }
-    end
-  end
-
-  describe '#present?' do
-    before { allow(subject).to receive(:tomogram).and_return(double) }
-    it { expect(subject.present?).to be_truthy }
-
-    context 'does not have tomogram' do
-      before { allow(subject).to receive(:tomogram).and_return(nil) }
-      it { expect(subject.present?).to be_falsey }
-    end
-  end
-
-  describe '#json_schema?' do
-    before { allow(subject).to receive(:json_schema).and_return(double) }
-    it { expect(subject.json_schema?).to be_truthy }
-
-    context 'does not have json-schema' do
-      before { allow(subject).to receive(:json_schema).and_return({}) }
-      it { expect(subject.json_schema?).to be_falsey }
     end
   end
 end

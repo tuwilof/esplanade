@@ -16,7 +16,7 @@ module Esplanade
 
       def json_schema
         @json_schema ||= tomogram.request
-        raise Esplanade::RequestDoesNotHaveJsonSchemas if @json_schema == {}
+        raise Esplanade::DocRequestWithoutJsonSchema if @json_schema == {}
         @json_schema
       rescue NoMethodError
         raise DocError
@@ -38,14 +38,6 @@ module Esplanade
         @responses ||= tomogram.responses
       rescue NoMethodError
         raise DocError
-      end
-
-      def present?
-        @present ||= !tomogram.nil?
-      end
-
-      def json_schema?
-        @has_json_schema ||= json_schema != {}
       end
     end
   end
