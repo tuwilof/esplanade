@@ -12,7 +12,7 @@ RSpec.describe Esplanade::Response::Doc do
   end
 
   describe '#tomogram' do
-    let(:tomogram) { {'status' => status} }
+    let(:tomogram) { { 'status' => status } }
     let(:status) { double }
     let(:request) { double(doc: double(responses: [tomogram])) }
     before { allow(subject).to receive(:status).and_return(status) }
@@ -26,7 +26,7 @@ RSpec.describe Esplanade::Response::Doc do
 
   describe '#json_schemas' do
     let(:json_schema) { double }
-    before { allow(subject).to receive(:tomogram).and_return([{'body' => json_schema}]) }
+    before { allow(subject).to receive(:tomogram).and_return([{ 'body' => json_schema }]) }
     it { expect(subject.json_schemas).to eq([json_schema]) }
 
     context 'does not have responses' do
