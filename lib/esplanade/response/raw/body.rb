@@ -24,7 +24,7 @@ module Esplanade
 
         def string_and_received
           @string_and_received ||= begin
-            [@body.join, true]
+            [@body.first, true]
           rescue
             ['', false]
           end
