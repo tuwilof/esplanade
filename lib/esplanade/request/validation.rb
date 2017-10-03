@@ -9,16 +9,13 @@ module Esplanade
         @doc = doc
       end
 
-      def error
-        @error ||= JSON::Validator.fully_validate(@doc.json_schema, @raw.body.to_hash)
-      end
-
       def valid!
-        return if error == []
+        @error ||= JSON::Validator.fully_validate(@doc.json_schema, @raw.body.to_hash)
+        return if @error == []
         raise RequestInvalid, method: @raw.method,
                               path: @raw.path,
                               body: @raw.body.to_string,
-                              error: error
+                              error: @error
       end
     end
   end
