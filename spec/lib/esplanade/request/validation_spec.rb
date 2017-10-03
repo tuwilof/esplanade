@@ -8,7 +8,7 @@ RSpec.describe Esplanade::Request::Validation do
 
   describe '#error' do
     let(:error) { double }
-    let(:raw) { double(body: double(to_h: double)) }
+    let(:raw) { double(body: double(to_hash: double)) }
     let(:doc) { double(json_schema: double) }
     before { allow(JSON::Validator).to receive(:fully_validate).and_return(error) }
     it { expect(subject.error).to eq(error) }
@@ -34,7 +34,7 @@ RSpec.describe Esplanade::Request::Validation do
     it { expect(subject.valid!).to be_nil }
 
     context 'invalid' do
-      let(:raw) { double(method: method, path: path, body: double(to_s: body), error: error) }
+      let(:raw) { double(method: method, path: path, body: double(to_string: body), error: error) }
       let(:method) { 'method' }
       let(:path) { 'path' }
       let(:body) { 'body' }

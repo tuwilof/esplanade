@@ -11,7 +11,7 @@ module Esplanade
 
       def error
         @error ||= if @doc.json_schema
-                     JSON::Validator.fully_validate(@doc.json_schema, @raw.body.to_h)
+                     JSON::Validator.fully_validate(@doc.json_schema, @raw.body.to_hash)
                    end
       end
 
@@ -23,7 +23,7 @@ module Esplanade
         return if error == []
         raise RequestInvalid, method: @raw.method,
                               path: @raw.path,
-                              body: @raw.body.to_s,
+                              body: @raw.body.to_string,
                               error: error
       end
     end
