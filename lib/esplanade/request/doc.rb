@@ -7,9 +7,9 @@ module Esplanade
       end
 
       def tomogram
-        @tomogram ||= if @main_documentation
-                        @main_documentation.find_request(method: @raw.method, path: @raw.path)
-                      end
+        @tomogram ||= @main_documentation.find_request(method: @raw.method, path: @raw.path)
+      rescue NoMethodError
+        raise DocRequestSearchError
       end
 
       def json_schema

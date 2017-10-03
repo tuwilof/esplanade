@@ -13,7 +13,7 @@ RSpec.describe Esplanade::Request::Doc do
 
     context 'does not have main documentation' do
       let(:main_documentation) { nil }
-      it { expect(subject.tomogram).to be_nil }
+      it { expect { subject.tomogram }.to raise_error(Esplanade::DocRequestSearchError) }
     end
   end
 

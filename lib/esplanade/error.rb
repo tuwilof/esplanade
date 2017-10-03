@@ -3,4 +3,5 @@ module Esplanade
   class RequestInvalid < Error; end
   class CanNotGetBodyOfRequest < Error; end
   class CanNotParseBodyOfRequest < Error; end
+  class DocRequestSearchError < Error; end
 end
