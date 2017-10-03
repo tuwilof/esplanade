@@ -2,16 +2,22 @@ module Esplanade
   class Request
     class Raw
       class Body
-        def initialize(env)
+        def initialize(raw_request, env)
+          @raw_request = raw_request
           @env = env
         end
 
         def to_s!
-          begin
-            @env['rack.request.form_vars']
-          rescue
-            raise CanNotGetBodyOfRequest
-          end
+          @env['rack.request.form_vars']
+        rescue NoMethodError
+          raise CanNotGetBodyOfRequest
+        end
+
+        def to_h!
+          MultiJson.load(to_s!)
+        rescue MultiJson::ParseError
+          raise CanNotParseBodyOfRequest,
+                "{:method=>\"#{@raw_request.method}\", :path=>\"#{@raw_request.path}\", :body=>\"#{to_s!}\"}"
         end
 
         def to_s

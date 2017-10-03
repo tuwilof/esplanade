@@ -16,7 +16,7 @@ module Esplanade
       end
 
       def body
-        @body ||= Esplanade::Request::Raw::Body.new(@env)
+        @body ||= Esplanade::Request::Raw::Body.new(self, @env)
       end
     end
   end

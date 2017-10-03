@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Esplanade::Request::Raw::Body do
-  subject { described_class.new(env) }
+  subject { described_class.new(raw_request, env) }
+  let(:raw_request) { double }
   let(:env) { double }
 
   describe '#to_s!' do
@@ -19,6 +20,26 @@ RSpec.describe Esplanade::Request::Raw::Body do
         expect { subject.to_s! }
           .to raise_error(
             Esplanade::CanNotGetBodyOfRequest
+          )
+      end
+    end
+  end
+
+  describe '#to_h!' do
+    let(:to_s) { '{"state": 1}' }
+    before { allow(subject).to receive(:to_s!).and_return(to_s) }
+    it { expect(subject.to_h!).to eq('state' => 1) }
+
+    context 'can not parse body of request' do
+      let(:to_s) { '{"state": 1' }
+      let(:raw_request) { double(method: method, path: path) }
+      let(:method) { 'method' }
+      let(:path) { 'path' }
+      it do
+        expect { subject.to_h! }
+          .to raise_error(
+            Esplanade::CanNotParseBodyOfRequest,
+            "{:method=>\"#{method}\", :path=>\"#{path}\", :body=>\"#{self}\"}"
           )
       end
     end
