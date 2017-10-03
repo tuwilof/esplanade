@@ -7,15 +7,14 @@ RSpec.describe Esplanade::Response::Doc do
 
   describe '#status' do
     let(:status) { double }
-    let(:raw_status) { double(to_s: status) }
+    before { allow(subject).to receive(:tomogram).and_return({ 'status' => status }) }
     it { expect(subject.status).to eq(status) }
   end
 
   describe '#tomogram' do
-    let(:tomogram) { { 'status' => status } }
-    let(:status) { double }
+    let(:tomogram) { { 'status' => raw_status } }
+    let(:raw_status) { double }
     let(:request) { double(doc: double(responses: [tomogram])) }
-    before { allow(subject).to receive(:status).and_return(status) }
     it { expect(subject.tomogram).to eq(tomogram) }
 
     context 'does not have responses' do

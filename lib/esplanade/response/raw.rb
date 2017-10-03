@@ -3,11 +3,13 @@ require 'esplanade/response/raw/body'
 module Esplanade
   class Response
     class Raw
-      attr_reader :status
-
-      def initialize(status, raw_body)
-        @status = status
+      def initialize(raw_status, raw_body)
+        @raw_status = raw_status
         @raw_body = raw_body
+      end
+
+      def status
+        @status ||= @raw_status.to_s
       end
 
       def body

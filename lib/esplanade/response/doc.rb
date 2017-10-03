@@ -7,13 +7,13 @@ module Esplanade
       end
 
       def status
-        @status ||= @raw_status.to_s
+        @status ||= tomogram['status']
       end
 
       def tomogram
         @tomogram ||= if @request.doc.responses
                         @request.doc.responses.find do |response|
-                          response['status'] == status
+                          response['status'] == @raw_status
                         end
                       end
       end
