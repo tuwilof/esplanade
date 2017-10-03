@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Esplanade::Response::Raw do
-  subject { described_class.new(raw_status, raw_body) }
+  subject { described_class.new(request, raw_status, raw_body) }
+  let(:request) { double }
   let(:raw_status) { double }
   let(:raw_body) { double }
 

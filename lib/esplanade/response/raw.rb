@@ -3,7 +3,8 @@ require 'esplanade/response/raw/body'
 module Esplanade
   class Response
     class Raw
-      def initialize(raw_status, raw_body)
+      def initialize(request, raw_status, raw_body)
+        @request = request
         @raw_status = raw_status
         @raw_body = raw_body
       end
@@ -13,7 +14,7 @@ module Esplanade
       end
 
       def body
-        @body ||= Esplanade::Response::Raw::Body.new(self, @raw_body)
+        @body ||= Esplanade::Response::Raw::Body.new(@request, self, @raw_body)
       end
     end
   end

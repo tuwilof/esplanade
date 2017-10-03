@@ -13,7 +13,7 @@ module Esplanade
     end
 
     def raw
-      @raw ||= Esplanade::Response::Raw.new(@status, @raw_body)
+      @raw ||= Esplanade::Response::Raw.new(@request,@status, @raw_body)
     end
 
     def doc
