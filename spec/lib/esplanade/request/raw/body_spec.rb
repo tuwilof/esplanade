@@ -30,7 +30,7 @@ RSpec.describe Esplanade::Request::Raw::Body do
 
   describe '#string_and_received' do
     let(:body) { double }
-    let(:env) { { 'rack.input' => double(read: body) } }
+    let(:env) { { 'rack.request.form_vars' => body } }
     it { expect(subject.string_and_received).to eq([body, true]) }
 
     context 'invalid' do

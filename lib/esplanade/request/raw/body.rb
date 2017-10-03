@@ -24,7 +24,7 @@ module Esplanade
 
         def string_and_received
           @string_and_received ||= begin
-            [@env['rack.input'].read, true]
+            [@env['rack.request.form_vars'], true]
           rescue
             ['', false]
           end
