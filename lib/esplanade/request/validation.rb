@@ -20,7 +20,7 @@ module Esplanade
       end
 
       def valid!
-        return if error! == []
+        return if error == []
         raise RequestInvalid, method: @raw.method,
                               path: @raw.path,
                               body: @raw.body.to_s,

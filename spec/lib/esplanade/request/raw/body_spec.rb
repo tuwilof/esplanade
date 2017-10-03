@@ -6,12 +6,11 @@ RSpec.describe Esplanade::Request::Raw::Body do
   let(:env) { double }
 
   describe '#to_s!' do
-    let(:string) { double }
-    before { allow(subject).to receive(:string_and_received).and_return([string]) }
-    it { expect(subject.to_s).to eq(string) }
-
     let(:body) { double }
     let(:env) { { 'rack.request.form_vars' => body } }
+    let(:raw_request) { double(method: method, path: path) }
+    let(:method) { 'method' }
+    let(:path) { 'path' }
     it { expect(subject.to_s!).to eq(body) }
 
     context 'can not get body of request' do
@@ -19,7 +18,8 @@ RSpec.describe Esplanade::Request::Raw::Body do
       it do
         expect { subject.to_s! }
           .to raise_error(
-            Esplanade::CanNotGetBodyOfRequest
+            Esplanade::CanNotGetBodyOfRequest,
+            "{:method=>\"#{method}\", :path=>\"#{path}\"}"
           )
       end
     end

@@ -10,7 +10,8 @@ module Esplanade
         def to_s!
           @env['rack.request.form_vars']
         rescue NoMethodError
-          raise CanNotGetBodyOfRequest
+          raise CanNotGetBodyOfRequest,
+            "{:method=>\"#{@raw_request.method}\", :path=>\"#{@raw_request.path}\"}"
         end
 
         def to_h!
