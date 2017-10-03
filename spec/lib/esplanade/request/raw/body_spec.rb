@@ -4,6 +4,26 @@ RSpec.describe Esplanade::Request::Raw::Body do
   subject { described_class.new(env) }
   let(:env) { double }
 
+  describe '#to_s!' do
+    let(:string) { double }
+    before { allow(subject).to receive(:string_and_received).and_return([string]) }
+    it { expect(subject.to_s).to eq(string) }
+
+    let(:body) { double }
+    let(:env) { { 'rack.request.form_vars' => body } }
+    it { expect(subject.to_s!).to eq(body) }
+
+    context 'can not get body of request' do
+      let(:env) { nil }
+      it do
+        expect { subject.to_s! }
+          .to raise_error(
+            Esplanade::CanNotGetBodyOfRequest
+          )
+      end
+    end
+  end
+
   describe '#to_s' do
     let(:string) { double }
     before { allow(subject).to receive(:string_and_received).and_return([string]) }

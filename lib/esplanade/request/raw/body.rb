@@ -6,6 +6,14 @@ module Esplanade
           @env = env
         end
 
+        def to_s!
+          begin
+            @env['rack.request.form_vars']
+          rescue
+            raise CanNotGetBodyOfRequest
+          end
+        end
+
         def to_s
           @to_s ||= string_and_received[0]
         end
