@@ -9,31 +9,31 @@ module Esplanade
       def tomogram
         @tomogram ||= @main_documentation.find_request(method: @raw.method, path: @raw.path)
       rescue NoMethodError
-        raise DocRequestSearchError
+        raise DocError
       end
 
       def json_schema
-        @json_schema ||= if tomogram
-                           tomogram.request
-                         end
+        @json_schema ||= tomogram.request
+      rescue NoMethodError
+        raise DocError
       end
 
       def method
-        @method ||= if tomogram
-                      tomogram.method
-                    end
+        @method ||= tomogram.method
+      rescue ArgumentError
+        raise DocError
       end
 
       def path
-        @path ||= if tomogram
-                    tomogram.path.to_s
-                  end
+        @path ||= tomogram.path.to_s
+      rescue NoMethodError
+        raise DocError
       end
 
       def responses
-        @responses ||= if tomogram
-                         tomogram.responses
-                       end
+        @responses ||= tomogram.responses
+      rescue NoMethodError
+        raise DocError
       end
 
       def present?

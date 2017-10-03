@@ -13,8 +13,7 @@ RSpec.describe Esplanade::Request::Raw::Body do
     context 'can not get body of request' do
       let(:env) { nil }
       let(:raw_request) { double(method: 'method', path: 'path') }
-      let(:message) { '{:method=>"method", :path=>"path"}' }
-      it { expect { subject.to_string }.to raise_error(Esplanade::CanNotGetBodyOfRequest, message) }
+      it { expect { subject.to_string }.to raise_error(Esplanade::RawRequestError) }
     end
   end
 

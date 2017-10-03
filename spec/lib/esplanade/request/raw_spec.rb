@@ -11,7 +11,7 @@ RSpec.describe Esplanade::Request::Raw do
 
     context 'can not get method of request' do
       let(:env) { nil }
-      it { expect { subject.method }.to raise_error(Esplanade::CanNotGetMethodOfRequest) }
+      it { expect { subject.method }.to raise_error(Esplanade::RawRequestError) }
     end
   end
 
@@ -22,7 +22,7 @@ RSpec.describe Esplanade::Request::Raw do
 
     context 'can not get path of request' do
       let(:env) { nil }
-      it { expect { subject.path }.to raise_error(Esplanade::CanNotGetPathOfRequest) }
+      it { expect { subject.path }.to raise_error(Esplanade::RawRequestError) }
     end
   end
 

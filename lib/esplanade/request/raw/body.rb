@@ -12,9 +12,7 @@ module Esplanade
         def to_string
           @string ||= @env['rack.request.form_vars']
         rescue NoMethodError
-          raise CanNotGetBodyOfRequest,
-                method: @raw_request.method,
-                path: @raw_request.path
+          raise RawRequestError
         end
 
         def to_hash

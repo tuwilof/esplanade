@@ -13,7 +13,7 @@ RSpec.describe Esplanade::Request::Doc do
 
     context 'does not have main documentation' do
       let(:main_documentation) { nil }
-      it { expect { subject.tomogram }.to raise_error(Esplanade::DocRequestSearchError) }
+      it { expect { subject.tomogram }.to raise_error(Esplanade::DocError) }
     end
   end
 
@@ -24,7 +24,7 @@ RSpec.describe Esplanade::Request::Doc do
 
     context 'does not have tomogram' do
       before { allow(subject).to receive(:tomogram).and_return(nil) }
-      it { expect(subject.json_schema).to be_nil }
+      it { expect { subject.json_schema }.to raise_error(Esplanade::DocError) }
     end
   end
 
@@ -35,7 +35,7 @@ RSpec.describe Esplanade::Request::Doc do
 
     context 'does not have tomogram' do
       before { allow(subject).to receive(:tomogram).and_return(nil) }
-      it { expect(subject.method).to be_nil }
+      it { expect { subject.method }.to raise_error(Esplanade::DocError) }
     end
   end
 
@@ -46,7 +46,7 @@ RSpec.describe Esplanade::Request::Doc do
 
     context 'does not have tomogram' do
       before { allow(subject).to receive(:tomogram).and_return(nil) }
-      it { expect(subject.path).to be_nil }
+      it { expect { subject.path }.to raise_error(Esplanade::DocError) }
     end
   end
 
@@ -57,7 +57,7 @@ RSpec.describe Esplanade::Request::Doc do
 
     context 'does not have tomogram' do
       before { allow(subject).to receive(:tomogram).and_return(nil) }
-      it { expect(subject.responses).to be_nil }
+      it { expect { subject.responses }.to raise_error(Esplanade::DocError) }
     end
   end
 
