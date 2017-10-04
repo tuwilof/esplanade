@@ -10,7 +10,7 @@ RSpec.describe Esplanade::Response::Doc do
     let(:tomogram) { { 'status' => raw_status } }
     let(:raw_status) { double }
     let(:request) { double(doc: double(responses: [tomogram])) }
-    it { expect(subject.tomogram).to eq(tomogram) }
+    it { expect(subject.tomogram).to eq([tomogram]) }
 
     context 'does not have request' do
       let(:request) { nil }

@@ -7,8 +7,8 @@ module Esplanade
       end
 
       def tomogram
-        @tomogram ||= @request.doc.responses.find { |response| response['status'] == @raw.status }
-        return @tomogram unless @tomogram.nil?
+        @tomogram ||= @request.doc.responses.find_all { |response| response['status'] == @raw.status }
+        return @tomogram unless @tomogram == []
         raise ResponseNotDocumented, not_documented
       rescue NoMethodError
         raise DocResponseError
