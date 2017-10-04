@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe Esplanade::Response::Validation do
-  subject { described_class.new(request, raw, doc) }
+  subject { described_class.new(request, doc, raw) }
 
   let(:request) { double }
   let(:raw) { double }

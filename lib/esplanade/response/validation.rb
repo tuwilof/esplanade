@@ -3,10 +3,10 @@ require 'json-schema'
 module Esplanade
   class Response
     class Validation
-      def initialize(request, raw, doc)
+      def initialize(request, doc, raw)
         @request = request
-        @raw = raw
         @doc = doc
+        @raw = raw
       end
 
       def valid!

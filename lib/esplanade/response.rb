@@ -1,5 +1,5 @@
-require 'esplanade/response/raw'
 require 'esplanade/response/doc'
+require 'esplanade/response/raw'
 require 'esplanade/response/validation'
 
 module Esplanade
@@ -12,16 +12,16 @@ module Esplanade
       @raw_body = raw_body
     end
 
-    def raw
-      @raw ||= Esplanade::Response::Raw.new(@request, @status, @raw_body)
-    end
-
     def doc
       @doc ||= Esplanade::Response::Doc.new(@request, @status)
     end
 
+    def raw
+      @raw ||= Esplanade::Response::Raw.new(@request, @status, @raw_body)
+    end
+
     def validation
-      @validation ||= Esplanade::Response::Validation.new(@request, raw, doc)
+      @validation ||= Esplanade::Response::Validation.new(@request, doc, raw)
     end
   end
 end
