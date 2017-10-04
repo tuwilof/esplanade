@@ -13,7 +13,7 @@ module Esplanade
     end
 
     def doc
-      @doc ||= Doc.new(@request, @status)
+      @doc ||= Doc.new(@request, raw)
     end
 
     def raw

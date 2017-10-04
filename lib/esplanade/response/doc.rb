@@ -1,13 +1,13 @@
 module Esplanade
   class Response
     class Doc
-      def initialize(request, raw_status)
+      def initialize(request, raw)
         @request = request
-        @raw_status = raw_status
+        @raw = raw
       end
 
       def tomogram
-        @tomogram ||= @request.doc.responses.find { |response| response['status'] == @raw_status }
+        @tomogram ||= @request.doc.responses.find { |response| response['status'] == @raw.status }
         return @tomogram unless @tomogram.nil?
         raise ResponseNotDocumented, not_documented
       rescue NoMethodError
@@ -32,7 +32,7 @@ module Esplanade
             method: @request.raw.method,
             path: @request.raw.path
           },
-          status: @raw_status
+          status: @raw.status
         }
       end
 

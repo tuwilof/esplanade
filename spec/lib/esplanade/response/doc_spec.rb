@@ -1,11 +1,12 @@
 require 'spec_helper'
 
 RSpec.describe Esplanade::Response::Doc do
-  subject { described_class.new(request, raw_status) }
+  subject { described_class.new(request, raw) }
   let(:request) { double }
-  let(:raw_status) { double }
+  let(:raw) { double }
 
   describe '#tomogram' do
+    let(:raw) { double(status: raw_status) }
     let(:tomogram) { { 'status' => raw_status } }
     let(:raw_status) { double }
     let(:request) { double(doc: double(responses: [tomogram])) }
