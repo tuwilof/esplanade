@@ -40,11 +40,6 @@ RSpec.describe Esplanade::Response::Doc do
     before { allow(subject).to receive(:tomogram).and_return([{ 'body' => json_schema }]) }
     it { expect(subject.json_schemas).to eq([json_schema]) }
 
-    context 'does not have responses' do
-      before { allow(subject).to receive(:tomogram).and_return(nil) }
-      it { expect { subject.json_schemas }.to raise_error(Esplanade::DocResponseError) }
-    end
-
     context 'json-schemas is empty' do
       let(:message) { '{:request=>{:method=>"method", :path=>"path"}, :status=>"status"}' }
       let(:request) { double(raw: double(method: 'method', path: 'path')) }
@@ -70,10 +65,5 @@ RSpec.describe Esplanade::Response::Doc do
     let(:status) { double }
     before { allow(subject).to receive(:tomogram).and_return('status' => status) }
     it { expect(subject.status).to eq(status) }
-
-    context 'does not have tomogram' do
-      before { allow(subject).to receive(:tomogram).and_return(nil) }
-      it { expect { subject.status }.to raise_error(Esplanade::DocResponseError) }
-    end
   end
 end

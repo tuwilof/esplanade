@@ -18,26 +18,18 @@ module Esplanade
         @json_schema ||= tomogram.request
         return @json_schema unless @json_schema == {}
         raise DocRequestWithoutJsonSchema, without_json_schema
-      rescue NoMethodError
-        raise DocRequestError
       end
 
       def method
         @method ||= tomogram.method
-      rescue ArgumentError
-        raise DocRequestError
       end
 
       def path
         @path ||= tomogram.path.to_s
-      rescue NoMethodError
-        raise DocRequestError
       end
 
       def responses
         @responses ||= tomogram.responses
-      rescue NoMethodError
-        raise DocRequestError
       end
 
       private

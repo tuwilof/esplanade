@@ -29,11 +29,6 @@ RSpec.describe Esplanade::Request::Doc do
     before { allow(subject).to receive(:tomogram).and_return(double(request: json_schema)) }
     it { expect(subject.json_schema).to eq(json_schema) }
 
-    context 'does not have tomogram' do
-      before { allow(subject).to receive(:tomogram).and_return(nil) }
-      it { expect { subject.json_schema }.to raise_error(Esplanade::DocRequestError) }
-    end
-
     context 'does not have json-schema' do
       let(:message) { '{:method=>"method", :path=>"path"}' }
       before do
@@ -49,32 +44,17 @@ RSpec.describe Esplanade::Request::Doc do
     let(:method) { double }
     before { allow(subject).to receive(:tomogram).and_return(double(method: method)) }
     it { expect(subject.method).to eq(method) }
-
-    context 'does not have tomogram' do
-      before { allow(subject).to receive(:tomogram).and_return(nil) }
-      it { expect { subject.method }.to raise_error(Esplanade::DocRequestError) }
-    end
   end
 
   describe '#path' do
     let(:path) { double }
     before { allow(subject).to receive(:tomogram).and_return(double(path: double(to_s: path))) }
     it { expect(subject.path).to eq(path) }
-
-    context 'does not have tomogram' do
-      before { allow(subject).to receive(:tomogram).and_return(nil) }
-      it { expect { subject.path }.to raise_error(Esplanade::DocRequestError) }
-    end
   end
 
   describe '#responses' do
     let(:responses) { double }
     before { allow(subject).to receive(:tomogram).and_return(double(responses: responses)) }
     it { expect(subject.responses).to eq(responses) }
-
-    context 'does not have tomogram' do
-      before { allow(subject).to receive(:tomogram).and_return(nil) }
-      it { expect { subject.responses }.to raise_error(Esplanade::DocRequestError) }
-    end
   end
 end
