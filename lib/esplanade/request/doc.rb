@@ -13,7 +13,7 @@ module Esplanade
               method: @raw.method,
               path: @raw.path
       rescue NoMethodError
-        raise DocError
+        raise DocRequestError
       end
 
       def json_schema
@@ -23,25 +23,25 @@ module Esplanade
               method: method,
               path: path
       rescue NoMethodError
-        raise DocError
+        raise DocRequestError
       end
 
       def method
         @method ||= tomogram.method
       rescue ArgumentError
-        raise DocError
+        raise DocRequestError
       end
 
       def path
         @path ||= tomogram.path.to_s
       rescue NoMethodError
-        raise DocError
+        raise DocRequestError
       end
 
       def responses
         @responses ||= tomogram.responses
       rescue NoMethodError
-        raise DocError
+        raise DocRequestError
       end
     end
   end

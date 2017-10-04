@@ -18,7 +18,7 @@ module Esplanade
           },
           status: @raw_status
       rescue NoMethodError
-        raise DocError
+        raise DocResponseError
       end
 
       def json_schemas

@@ -13,17 +13,17 @@ RSpec.describe Esplanade::Response::Doc do
 
     context 'does not have request' do
       let(:request) { nil }
-      it { expect { subject.tomogram }.to raise_error(Esplanade::DocError) }
+      it { expect { subject.tomogram }.to raise_error(Esplanade::DocResponseError) }
     end
 
     context 'does not have request documentation' do
       let(:request) { double(doc: nil) }
-      it { expect { subject.tomogram }.to raise_error(Esplanade::DocError) }
+      it { expect { subject.tomogram }.to raise_error(Esplanade::DocResponseError) }
     end
 
     context 'does not have responses' do
       let(:request) { double(doc: double(responses: nil)) }
-      it { expect { subject.tomogram }.to raise_error(Esplanade::DocError) }
+      it { expect { subject.tomogram }.to raise_error(Esplanade::DocResponseError) }
     end
 
     context 'response not documented' do
