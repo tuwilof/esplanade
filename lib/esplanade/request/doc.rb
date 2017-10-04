@@ -9,7 +9,7 @@ module Esplanade
       def tomogram
         @tomogram ||= @main_documentation.find_request(method: @raw.method, path: @raw.path)
         return @tomogram unless @tomogram.nil?
-        raise Esplanade::RequestNotDocumented,
+        raise RequestNotDocumented,
               method: @raw.method,
               path: @raw.path
       rescue NoMethodError
@@ -19,7 +19,7 @@ module Esplanade
       def json_schema
         @json_schema ||= tomogram.request
         return @json_schema unless @json_schema == {}
-        raise Esplanade::DocRequestWithoutJsonSchema,
+        raise DocRequestWithoutJsonSchema,
               method: method,
               path: path
       rescue NoMethodError

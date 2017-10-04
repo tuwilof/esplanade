@@ -10,15 +10,15 @@ module Esplanade
     end
 
     def doc
-      @doc ||= Esplanade::Request::Doc.new(@main_documentation, raw)
+      @doc ||= Doc.new(@main_documentation, raw)
     end
 
     def raw
-      @raw ||= Esplanade::Request::Raw.new(@env)
+      @raw ||= Raw.new(@env)
     end
 
     def validation
-      @validation || Esplanade::Request::Validation.new(doc, raw)
+      @validation || Validation.new(doc, raw)
     end
   end
 end

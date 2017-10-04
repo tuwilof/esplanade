@@ -14,7 +14,7 @@ module Esplanade
       end
 
       def body
-        @body ||= Esplanade::Response::Raw::Body.new(@request, self, @raw_body)
+        @body ||= Body.new(@request, self, @raw_body)
       end
     end
   end
