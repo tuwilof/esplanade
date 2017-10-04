@@ -14,4 +14,5 @@ module Esplanade
   class ResponseNotDocumented         < Error; end
   class DocResponseWithoutJsonSchemas < Error; end
   class ResponseBodyIsNotJson         < Error; end
+  class ResponseInvalid               < Error; end
 end
