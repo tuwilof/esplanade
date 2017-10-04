@@ -10,7 +10,7 @@ module Esplanade
     end
 
     def doc
-      @doc ||= Doc.new(@main_documentation, raw)
+      @doc ||= Doc.new(@documentation, raw)
     end
 
     def raw
