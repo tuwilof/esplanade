@@ -70,5 +70,10 @@ RSpec.describe Esplanade::Response::Doc do
     let(:status) { double }
     before { allow(subject).to receive(:tomogram).and_return('status' => status) }
     it { expect(subject.status).to eq(status) }
+
+    context 'does not have tomogram' do
+      before { allow(subject).to receive(:tomogram).and_return(nil) }
+      it { expect { subject.status }.to raise_error(Esplanade::DocResponseError) }
+    end
   end
 end

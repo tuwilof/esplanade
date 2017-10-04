@@ -34,6 +34,8 @@ module Esplanade
 
       def status
         @status ||= tomogram['status']
+      rescue NoMethodError
+        raise DocResponseError
       end
     end
   end
