@@ -2,10 +2,10 @@
 
 [![Build Status](https://travis-ci.org/funbox/esplanade.svg?branch=master)](https://travis-ci.org/funbox/esplanade)
 
-This gem will help you validation your API in strict accordance to the documentation in
+This gem will help you validation and sinhronize your API in strict accordance to the documentation in
 [API Blueprint](https://apiblueprint.org/) format.
-To do this, when you run your application, it automatically searches for the corresponding json-schemas in the
-documentation and then validates requests and responses with them.
+To do this it automatically searches received requestes and responses in the documentation and run validates
+json-schemas.
 
 ## Installation
 
@@ -25,23 +25,24 @@ Or install it yourself as:
 
 ## Usage
 
-For example, analysis using a [Sentry](https://sentry.io/).
+Example:
 
-`middlewares/sentry_esplanade_middleware.rb`
+`middlewares/your_middleware.rb`
 
 ```ruby
-class SentryEsplanadeMiddleware < Esplanade::Middleware
+class YourMiddleware < Esplanade::Middleware
   def call(env)
-    status, headers, body = @app.call(env)
-    sentry(Esplanade::Response.new(Esplanade::Request.new(@documentation, env), status, body))
-    [status, headers, body]
-  end
+    request = Esplanade::Request.new(@documentation, env)
+    request.validation.valid!
 
-  def sentry(response)
-    response.request.validation.valid!
+    status, headers, body = @app.call(env)
+
+    response = Esplanade::Response.new(request, status, body)
     response.validation.valid!
+
+    [status, headers, body]
   rescue Esplanade::Error => e
-    Raven.capture_exception(e)
+    your_render_error(e)
   end
 end
 ```
@@ -50,13 +51,12 @@ end
 
 ```ruby
 require 'esplanade'
-
 Esplanade.configure do |config|
   config.apib_path = 'doc/backend.apib'
 end
 
-require 'middlewares/sentry_esplanade_middleware'
-config.middleware.use SentryEsplanadeMiddleware
+require 'middlewares/your_middleware'
+config.middleware.use YourMiddleware
 ```
 
 ## Config
