@@ -6,22 +6,29 @@ module Esplanade
         @raw_status = raw_status
       end
 
-      def status
-        @status ||= tomogram['status']
-      end
-
       def tomogram
-        @tomogram ||= if @request.doc.responses
-                        @request.doc.responses.find do |response|
-                          response['status'] == @raw_status
-                        end
+        @tomogram ||= @request.doc.responses.find do |response|
+                        response['status'] == @raw_status
                       end
+        return @tomogram unless @tomogram.nil?
+        raise ResponseNotDocumented,
+          request: {
+            method: @request.raw.method,
+            path: @request.raw.path
+          },
+          status: @raw_status
+      rescue NoMethodError
+        raise DocError
       end
 
       def json_schemas
         @json_schemas ||= if tomogram
                             tomogram.map { |action| action['body'] }
                           end
+      end
+
+      def status
+        @status ||= tomogram['status']
       end
 
       def present?

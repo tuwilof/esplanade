@@ -10,5 +10,6 @@ module Esplanade
   class RequestBodyIsNotJson        < Error; end
   class RequestInvalid              < Error; end
 
+  class ResponseNotDocumented < Error; end
   class ResponseBodyIsNotJson < Error; end
 end
