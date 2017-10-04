@@ -42,7 +42,27 @@ RSpec.describe Esplanade::Response::Doc do
 
     context 'does not have responses' do
       before { allow(subject).to receive(:tomogram).and_return(nil) }
-      it { expect(subject.json_schemas).to be_nil }
+      it { expect { subject.json_schemas }.to raise_error(Esplanade::DocResponseError) }
+    end
+
+    context 'json-schemas is empty' do
+      let(:message) { '{:request=>{:method=>"method", :path=>"path"}, :status=>"status"}' }
+      let(:request) { double(raw: double(method: 'method', path: 'path')) }
+      before do
+        allow(subject).to receive(:tomogram).and_return([])
+        allow(subject).to receive(:status).and_return('status')
+      end
+      it { expect { subject.json_schemas }.to raise_error(Esplanade::DocResponseWithoutJsonSchemas, message) }
+    end
+
+    context 'not all json-schema' do
+      let(:message) { '{:request=>{:method=>"method", :path=>"path"}, :status=>"status"}' }
+      let(:request) { double(raw: double(method: 'method', path: 'path')) }
+      before do
+        allow(subject).to receive(:tomogram).and_return([{ 'body' => {} }])
+        allow(subject).to receive(:status).and_return('status')
+      end
+      it { expect { subject.json_schemas }.to raise_error(Esplanade::DocResponseWithoutJsonSchemas, message) }
     end
   end
 
@@ -50,40 +70,5 @@ RSpec.describe Esplanade::Response::Doc do
     let(:status) { double }
     before { allow(subject).to receive(:tomogram).and_return('status' => status) }
     it { expect(subject.status).to eq(status) }
-  end
-
-  describe '#present?' do
-    before { allow(subject).to receive(:tomogram).and_return(double) }
-    it { expect(subject.present?).to be_truthy }
-
-    context 'does not have tomogram' do
-      before { allow(subject).to receive(:tomogram).and_return(nil) }
-      it { expect(subject.present?).to be_falsey }
-    end
-
-    context 'tomogram is empty' do
-      before { allow(subject).to receive(:tomogram).and_return([]) }
-      it { expect(subject.present?).to be_falsey }
-    end
-  end
-
-  describe '#json_schemas?' do
-    before { allow(subject).to receive(:json_schemas).and_return([double, double]) }
-    it { expect(subject.json_schemas?).to be_truthy }
-
-    context 'does not have json-schemas' do
-      before { allow(subject).to receive(:json_schemas).and_return(nil) }
-      it { expect(subject.json_schemas?).to be_falsey }
-    end
-
-    context 'json-schemas is empty' do
-      before { allow(subject).to receive(:json_schemas).and_return([]) }
-      it { expect(subject.json_schemas?).to be_falsey }
-    end
-
-    context 'not all json-schema' do
-      before { allow(subject).to receive(:json_schemas).and_return([double, {}]) }
-      it { expect(subject.json_schemas?).to be_falsey }
-    end
   end
 end
