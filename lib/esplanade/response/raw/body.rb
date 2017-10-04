@@ -19,13 +19,20 @@ module Esplanade
         def to_hash
           @hash ||= MultiJson.load(to_string)
         rescue MultiJson::ParseError
-          raise ResponseBodyIsNotJson,
-                request: {
-                  method: @request.raw.method,
-                  path: @request.raw.path
-                },
-                status: @raw_response.status,
-                body: @raw_response.body.to_string
+          raise ResponseBodyIsNotJson, message
+        end
+
+        private
+
+        def message
+          {
+            request: {
+              method: @request.raw.method,
+              path: @request.raw.path
+            },
+            status: @raw_response.status,
+            body: @raw_response.body.to_string
+          }
         end
       end
     end

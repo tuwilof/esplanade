@@ -9,12 +9,7 @@ module Esplanade
       def tomogram
         @tomogram ||= @request.doc.responses.find { |response| response['status'] == @raw_status }
         return @tomogram unless @tomogram.nil?
-        raise ResponseNotDocumented,
-              request: {
-                method: @request.raw.method,
-                path: @request.raw.path
-              },
-              status: @raw_status
+        raise ResponseNotDocumented, not_documented
       rescue NoMethodError
         raise DocResponseError
       end
@@ -22,12 +17,7 @@ module Esplanade
       def json_schemas
         @json_schemas ||= tomogram.map { |action| action['body'] }
         return @json_schemas if @json_schemas != [] && @json_schemas.all? { |json_schema| json_schema != {} }
-        raise DocResponseWithoutJsonSchemas,
-              request: {
-                method: @request.raw.method,
-                path: @request.raw.path
-              },
-              status: status
+        raise DocResponseWithoutJsonSchemas, without_json_schemas
       rescue NoMethodError
         raise DocResponseError
       end
@@ -36,6 +26,28 @@ module Esplanade
         @status ||= tomogram['status']
       rescue NoMethodError
         raise DocResponseError
+      end
+
+      private
+
+      def not_documented
+        {
+          request: {
+            method: @request.raw.method,
+            path: @request.raw.path
+          },
+          status: @raw_status
+        }
+      end
+
+      def without_json_schemas
+        {
+          request: {
+            method: @request.raw.method,
+            path: @request.raw.path
+          },
+          status: status
+        }
       end
     end
   end
