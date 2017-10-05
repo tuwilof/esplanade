@@ -44,7 +44,7 @@ module Esplanade
             path: @request.raw.path
           },
           status: @raw.status,
-          body: @raw.body.to_hash,
+          body: @raw.body.to_string,
           error: @error
         }
       end
