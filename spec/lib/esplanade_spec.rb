@@ -10,11 +10,6 @@ RSpec.describe Esplanade do
   end
 
   context 'if default' do
-    before do
-      stub_const('Tomograph::Tomogram', nil)
-      allow(Tomograph::Tomogram).to receive(:json).and_return({})
-    end
-
     it 'makes settings' do
       Esplanade.configure do |config|
         config.prefix = '/api/v1'
