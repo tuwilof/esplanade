@@ -1,72 +1,70 @@
 require 'spec_helper'
 
 RSpec.describe Esplanade::Response::Doc do
-  subject { described_class.new(raw_status, request) }
-  let(:raw_status) { double }
+  subject { described_class.new(request, raw) }
   let(:request) { double }
-
-  describe '#status' do
-    let(:status) { double }
-    let(:raw_status) { double(to_s: status) }
-    it { expect(subject.status).to eq(status) }
-  end
+  let(:raw) { double }
 
   describe '#tomogram' do
-    let(:tomogram) { {'status' => status} }
-    let(:status) { double }
+    let(:raw) { double(status: raw_status) }
+    let(:tomogram) { { 'status' => raw_status } }
+    let(:raw_status) { double }
     let(:request) { double(doc: double(responses: [tomogram])) }
-    before { allow(subject).to receive(:status).and_return(status) }
-    it { expect(subject.tomogram).to eq(tomogram) }
+    it { expect(subject.tomogram).to eq([tomogram]) }
+
+    context 'does not have request' do
+      let(:request) { nil }
+      it { expect { subject.tomogram }.to raise_error(Esplanade::DocResponseError) }
+    end
+
+    context 'does not have request documentation' do
+      let(:request) { double(doc: nil) }
+      it { expect { subject.tomogram }.to raise_error(Esplanade::DocResponseError) }
+    end
 
     context 'does not have responses' do
       let(:request) { double(doc: double(responses: nil)) }
-      it { expect(subject.tomogram).to be_nil }
+      it { expect { subject.tomogram }.to raise_error(Esplanade::DocResponseError) }
+    end
+
+    context 'response not documented' do
+      let(:tomogram) { { 'status' => double } }
+      let(:raw_status) { 'status' }
+      let(:request) { double(doc: double(responses: [tomogram]), raw: double(method: 'method', path: 'path')) }
+      let(:message) { '{:request=>{:method=>"method", :path=>"path"}, :status=>"status"}' }
+      it { expect { subject.tomogram }.to raise_error(Esplanade::ResponseNotDocumented, message) }
     end
   end
 
   describe '#json_schemas' do
     let(:json_schema) { double }
-    before { allow(subject).to receive(:tomogram).and_return([{'body' => json_schema}]) }
+    before { allow(subject).to receive(:tomogram).and_return([{ 'body' => json_schema }]) }
     it { expect(subject.json_schemas).to eq([json_schema]) }
 
-    context 'does not have responses' do
-      before { allow(subject).to receive(:tomogram).and_return(nil) }
-      it { expect(subject.json_schemas).to be_nil }
-    end
-  end
-
-  describe '#present?' do
-    before { allow(subject).to receive(:tomogram).and_return(double) }
-    it { expect(subject.present?).to be_truthy }
-
-    context 'does not have tomogram' do
-      before { allow(subject).to receive(:tomogram).and_return(nil) }
-      it { expect(subject.present?).to be_falsey }
-    end
-
-    context 'tomogram is empty' do
-      before { allow(subject).to receive(:tomogram).and_return([]) }
-      it { expect(subject.present?).to be_falsey }
-    end
-  end
-
-  describe '#json_schemas?' do
-    before { allow(subject).to receive(:json_schemas).and_return([double, double]) }
-    it { expect(subject.json_schemas?).to be_truthy }
-
-    context 'does not have json-schemas' do
-      before { allow(subject).to receive(:json_schemas).and_return(nil) }
-      it { expect(subject.json_schemas?).to be_falsey }
-    end
-
     context 'json-schemas is empty' do
-      before { allow(subject).to receive(:json_schemas).and_return([]) }
-      it { expect(subject.json_schemas?).to be_falsey }
+      let(:message) { '{:request=>{:method=>"method", :path=>"path"}, :status=>"status"}' }
+      let(:request) { double(raw: double(method: 'method', path: 'path')) }
+      before do
+        allow(subject).to receive(:tomogram).and_return([])
+        allow(subject).to receive(:status).and_return('status')
+      end
+      it { expect { subject.json_schemas }.to raise_error(Esplanade::ResponseDocWithoutJsonSchemas, message) }
     end
 
     context 'not all json-schema' do
-      before { allow(subject).to receive(:json_schemas).and_return([double, {}]) }
-      it { expect(subject.json_schemas?).to be_falsey }
+      let(:message) { '{:request=>{:method=>"method", :path=>"path"}, :status=>"status"}' }
+      let(:request) { double(raw: double(method: 'method', path: 'path')) }
+      before do
+        allow(subject).to receive(:tomogram).and_return([{ 'body' => {} }])
+        allow(subject).to receive(:status).and_return('status')
+      end
+      it { expect { subject.json_schemas }.to raise_error(Esplanade::ResponseDocWithoutJsonSchemas, message) }
     end
+  end
+
+  describe '#status' do
+    let(:status) { double }
+    before { allow(subject).to receive(:tomogram).and_return('status' => status) }
+    it { expect(subject.status).to eq(status) }
   end
 end

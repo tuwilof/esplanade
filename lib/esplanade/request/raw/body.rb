@@ -1,41 +1,34 @@
+require 'multi_json'
+
 module Esplanade
   class Request
     class Raw
       class Body
-        def initialize(env)
+        def initialize(raw_request, env)
+          @raw_request = raw_request
           @env = env
         end
 
-        def to_s
-          @to_s ||= string_and_received[0]
+        def to_string
+          @string ||= @env['rack.request.form_vars']
+        rescue NoMethodError
+          raise RawRequestError
         end
 
-        def to_h
-          @to_h ||= hash_and_json[0]
+        def to_hash
+          @hash ||= MultiJson.load(to_string)
+        rescue MultiJson::ParseError
+          raise RequestBodyIsNotJson, message
         end
 
-        def received?
-          @received ||= string_and_received[1]
-        end
+        private
 
-        def json?
-          @json ||= hash_and_json[1]
-        end
-
-        def string_and_received
-          @string_and_received ||= begin
-            [@env['rack.input'].read, true]
-          rescue
-            ['', false]
-          end
-        end
-
-        def hash_and_json
-          @hash_and_json ||= begin
-            [MultiJson.load(to_s), true]
-          rescue MultiJson::ParseError
-            [{}, false]
-          end
+        def message
+          {
+            method: @raw_request.method,
+            path: @raw_request.path,
+            body: to_string
+          }
         end
       end
     end

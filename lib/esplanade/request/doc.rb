@@ -7,41 +7,45 @@ module Esplanade
       end
 
       def tomogram
-        @tomogram ||= if @main_documentation
-                        @main_documentation.find_request(method: @raw.method, path: @raw.path)
-                      end
+        @tomogram ||= @main_documentation.find_request(method: @raw.method, path: @raw.path)
+        return @tomogram unless @tomogram.nil?
+        raise RequestNotDocumented, not_documented
+      rescue NoMethodError
+        raise DocRequestError
       end
 
       def json_schema
-        @json_schema ||= if tomogram
-                           tomogram.request
-                         end
+        @json_schema ||= tomogram.request
+        return @json_schema unless @json_schema == {}
+        raise RequestDocWithoutJsonSchema, without_json_schema
       end
 
       def method
-        @method ||= if tomogram
-                      tomogram.method
-                    end
+        @method ||= tomogram.method
       end
 
       def path
-        @path ||= if tomogram
-                    tomogram.path.to_s
-                  end
+        @path ||= tomogram.path.to_s
       end
 
       def responses
-        @responses ||= if tomogram
-                         tomogram.responses
-                       end
+        @responses ||= tomogram.responses
       end
 
-      def present?
-        @present ||= !tomogram.nil?
+      private
+
+      def not_documented
+        {
+          method: @raw.method,
+          path: @raw.path
+        }
       end
 
-      def json_schema?
-        @has_json_schema ||= json_schema != {}
+      def without_json_schema
+        {
+          method: method,
+          path: path
+        }
       end
     end
   end

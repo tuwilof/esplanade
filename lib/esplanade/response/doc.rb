@@ -1,38 +1,49 @@
 module Esplanade
   class Response
     class Doc
-      def initialize(raw_status, request)
-        @raw_status = raw_status
+      def initialize(request, raw)
         @request = request
-      end
-
-      def status
-        @status ||= @raw_status.to_s
+        @raw = raw
       end
 
       def tomogram
-        @tomogram ||= if @request.doc.responses
-                        @request.doc.responses.find do |response|
-                          response['status'] == status
-                        end
-                      end
+        @tomogram ||= @request.doc.responses.find_all { |response| response['status'] == @raw.status }
+        return @tomogram unless @tomogram == []
+        raise ResponseNotDocumented, not_documented
+      rescue NoMethodError
+        raise DocResponseError
       end
 
       def json_schemas
-        @json_schemas ||= if tomogram
-                            tomogram.map { |action| action['body'] }
-                          end
+        @json_schemas ||= tomogram.map { |action| action['body'] }
+        return @json_schemas if @json_schemas != [] && @json_schemas.all? { |json_schema| json_schema != {} }
+        raise ResponseDocWithoutJsonSchemas, without_json_schemas
       end
 
-      def present?
-        @present ||= tomogram != [] && !tomogram.nil?
+      def status
+        @status ||= tomogram['status']
       end
 
-      def json_schemas?
-        @has_json_schemas ||=
-          json_schemas &&
-          json_schemas != [] &&
-          json_schemas.all? { |json_schema| json_schema != {} }
+      private
+
+      def not_documented
+        {
+          request: {
+            method: @request.raw.method,
+            path: @request.raw.path
+          },
+          status: @raw.status
+        }
+      end
+
+      def without_json_schemas
+        {
+          request: {
+            method: @request.raw.method,
+            path: @request.raw.path
+          },
+          status: status
+        }
       end
     end
   end

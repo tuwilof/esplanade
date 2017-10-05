@@ -1,39 +1,47 @@
 require 'spec_helper'
 
 RSpec.describe Esplanade::Response::Validation do
-  subject { described_class.new(raw, doc) }
+  subject { described_class.new(request, doc, raw) }
 
+  let(:request) { double }
   let(:raw) { double }
   let(:doc) { double }
 
-  describe '#error' do
+  describe '#valid!' do
     context 'one json-schema' do
-      let(:error) { double }
-      let(:raw) { double(json?: true, body: double(to_h: double)) }
-      let(:doc) { double(json_schemas?: true, json_schemas: [double]) }
-      before { allow(JSON::Validator).to receive(:fully_validate).and_return(error) }
-      it { expect(subject.error).to eq(error) }
+      let(:raw) { double(body: double(to_hash: double)) }
+      let(:doc) { double(json_schemas: [double]) }
+      before { allow(JSON::Validator).to receive(:fully_validate).and_return([]) }
+      it { expect(subject.valid!).to be_nil }
+
+      context 'invalid' do
+        let(:request) { double(raw: double(method: 'method', path: 'path')) }
+        let(:raw) { double(status: 'status', body: double(to_hash: double)) }
+        let(:message) do
+          '{:request=>{:method=>"method", :path=>"path"}, '\
+          ':status=>"status", :body=>#<Double (anonymous)>, :error=>"[error]"}'
+        end
+        before { allow(JSON::Validator).to receive(:fully_validate).and_return('[error]') }
+        it { expect { subject.valid! }.to raise_error(Esplanade::ResponseInvalid, message) }
+      end
     end
 
     context 'more than one json-schema' do
-      let(:raw) { double(json?: true, body: double(to_h: double)) }
-      let(:doc) { double(json_schemas?: true, json_schemas: [double, double]) }
-      before { allow(JSON::Validator).to receive(:fully_validate).and_return(error) }
+      let(:raw) { double(body: double(to_hash: double)) }
+      let(:doc) { double(json_schemas: [double, double]) }
+      before { allow(JSON::Validator).to receive(:fully_validate).and_return([]) }
+      it { expect(subject.valid!).to be_nil }
 
-      context 'one valid' do
-        let(:error) { [] }
-        it { expect(subject.error).to eq(error) }
-      end
-
-      context 'all invalid' do
-        let(:error) { double }
-        it { expect(subject.error).to eq(['invalid']) }
+      context 'invalid' do
+        let(:request) { double(raw: double(method: 'method', path: 'path')) }
+        let(:raw) { double(status: 'status', body: double(to_hash: double)) }
+        let(:message) do
+          '{:request=>{:method=>"method", :path=>"path"}, '\
+          ':status=>"status", :body=>#<Double (anonymous)>, :error=>["invalid"]}'
+        end
+        before { allow(JSON::Validator).to receive(:fully_validate).and_return(double) }
+        it { expect { subject.valid! }.to raise_error(Esplanade::ResponseInvalid, message) }
       end
     end
-  end
-
-  describe '#valid?' do
-    before { allow(subject).to receive(:error) }
-    it { expect(subject.valid?).to be_falsey }
   end
 end

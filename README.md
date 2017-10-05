@@ -2,6 +2,11 @@
 
 [![Build Status](https://travis-ci.org/funbox/esplanade.svg?branch=master)](https://travis-ci.org/funbox/esplanade)
 
+This gem will help you validation and sinhronize your API in strict accordance to the documentation in
+[API Blueprint](https://apiblueprint.org/) format.
+To do this it automatically searches received requestes and responses in the documentation and run validates
+json-schemas.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -20,36 +25,38 @@ Or install it yourself as:
 
 ## Usage
 
-config/application.rb
-
-```ruby
-require 'esplanade'
-config.middleware.use YourMiddleware
-```
-
 Example:
+
+`middlewares/your_middleware.rb`
+
 ```ruby
 class YourMiddleware < Esplanade::Middleware
   def call(env)
-    request = Esplanade::Request.new(env, @tomogram)
-    check_request(request)
+    request = Esplanade::Request.new(@documentation, env)
+    request.validation.valid!
+
     status, headers, body = @app.call(env)
-    response = Esplanade::Response.new(status, body, request)
-    check_response(response)
+
+    response = Esplanade::Response.new(request, status, body)
+    response.validation.valid!
+
     [status, headers, body]
-  end
-
-  def check_request(request)
-    return not_documented_request(request) unless request.documented?
-    invalid_request(request) unless request.valid?
-  end
-
-  def check_response(response)
-    return unless response.request.documented?
-    return not_documented_response(response) unless response.documented?
-    invalid_response(response) unless response.valid?
+  rescue Esplanade::Error => e
+    your_render_error(e)
   end
 end
+```
+
+`config/application.rb`
+
+```ruby
+require 'esplanade'
+Esplanade.configure do |config|
+  config.apib_path = 'doc/backend.apib'
+end
+
+require_relative '../middlewares/your_middleware'
+config.middleware.use YourMiddleware
 ```
 
 ## Config
@@ -64,7 +71,7 @@ Path to API Blueprint documentation pre-parsed with `drafter` and saved to a YAM
 
 ### prefix
 
-Prefix of API requests. Example: `'/api'`. Validation will not be performed if the request path does not start with a prefix.
+Prefix of API requests. Example: `'/api'`. The prefix is added to the requests in the documentation.
 
 ## License
 

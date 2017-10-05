@@ -1,52 +1,31 @@
 require 'spec_helper'
 
 RSpec.describe Esplanade::Request::Raw::Body do
-  subject { described_class.new(env) }
+  subject { described_class.new(raw_request, env) }
+  let(:raw_request) { double }
   let(:env) { double }
 
-  describe '#to_s' do
-    let(:string) { double }
-    before { allow(subject).to receive(:string_and_received).and_return([string]) }
-    it { expect(subject.to_s).to eq(string) }
-  end
-
-  describe '#to_h' do
-    let(:hash) { double }
-    before { allow(subject).to receive(:hash_and_json).and_return([hash]) }
-    it { expect(subject.to_h).to eq(hash) }
-  end
-
-  describe '#received?' do
-    let(:received) { double }
-    before { allow(subject).to receive(:string_and_received).and_return([double, received]) }
-    it { expect(subject.received?).to eq(received) }
-  end
-
-  describe '#json?' do
-    let(:json) { double }
-    before { allow(subject).to receive(:hash_and_json).and_return([double, json]) }
-    it { expect(subject.json?).to eq(json) }
-  end
-
-  describe '#string_and_received' do
+  describe '#to_string' do
     let(:body) { double }
-    let(:env) { { 'rack.input' => double(read: body) } }
-    it { expect(subject.string_and_received).to eq([body, true]) }
+    let(:env) { { 'rack.request.form_vars' => body } }
+    it { expect(subject.to_string).to eq(body) }
 
-    context 'invalid' do
+    context 'can not get body of request' do
       let(:env) { nil }
-      it { expect(subject.string_and_received).to eq(['', false]) }
+      let(:raw_request) { double(method: 'method', path: 'path') }
+      it { expect { subject.to_string }.to raise_error(Esplanade::RawRequestError) }
     end
   end
 
-  describe '#hash_and_json' do
-    let(:to_s) { '{"state": 1}' }
-    before { allow(subject).to receive(:to_s).and_return(to_s) }
-    it { expect(subject.hash_and_json).to eq([{ 'state' => 1 }, true]) }
+  describe '#to_hash' do
+    before { allow(subject).to receive(:to_string).and_return('{"state": 1}') }
+    it { expect(subject.to_hash).to eq('state' => 1) }
 
-    context 'invalid' do
-      let(:to_s) { '{"state": 1' }
-      it { expect(subject.hash_and_json).to eq([{}, false]) }
+    context 'can not parse body of request' do
+      let(:raw_request) { double(method: 'method', path: 'path') }
+      let(:message) { '{:method=>"method", :path=>"path", :body=>"{\"state\": 1"}' }
+      before { allow(subject).to receive(:to_string).and_return('{"state": 1') }
+      it { expect { subject.to_hash }.to raise_error(Esplanade::RequestBodyIsNotJson, message) }
     end
   end
 end
