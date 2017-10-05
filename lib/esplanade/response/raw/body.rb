@@ -11,8 +11,9 @@ module Esplanade
         end
 
         def to_string
-          @string ||= @raw_body.first
-        rescue NoMethodError
+          @string ||= @raw_body.body rescue nil
+          @string ||= @raw_body.first rescue nil
+          return @string unless @string.nil?
           raise RawResponseError
         end
 

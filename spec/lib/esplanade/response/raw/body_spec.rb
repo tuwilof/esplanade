@@ -8,8 +8,13 @@ RSpec.describe Esplanade::Response::Raw::Body do
 
   describe '#to_string' do
     let(:body) { double }
-    let(:raw_body) { [body] }
+    let(:raw_body) { double(body: body) }
     it { expect(subject.to_string).to eq(body) }
+
+    context 'body in array' do
+      let(:raw_body) { [body] }
+      it { expect(subject.to_string).to eq(body) }
+    end
 
     context 'can not get body of response' do
       let(:raw_body) { nil }

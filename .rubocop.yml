@@ -15,3 +15,6 @@ Metrics/BlockLength:
 
 Style/IfUnlessModifier:
   Enabled: false
+
+Style/RescueModifier:
+  Enabled: false
