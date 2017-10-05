@@ -48,7 +48,7 @@ RSpec.describe Esplanade::Response::Doc do
         allow(subject).to receive(:tomogram).and_return([])
         allow(subject).to receive(:status).and_return('status')
       end
-      it { expect { subject.json_schemas }.to raise_error(Esplanade::DocResponseWithoutJsonSchemas, message) }
+      it { expect { subject.json_schemas }.to raise_error(Esplanade::ResponseDocWithoutJsonSchemas, message) }
     end
 
     context 'not all json-schema' do
@@ -58,7 +58,7 @@ RSpec.describe Esplanade::Response::Doc do
         allow(subject).to receive(:tomogram).and_return([{ 'body' => {} }])
         allow(subject).to receive(:status).and_return('status')
       end
-      it { expect { subject.json_schemas }.to raise_error(Esplanade::DocResponseWithoutJsonSchemas, message) }
+      it { expect { subject.json_schemas }.to raise_error(Esplanade::ResponseDocWithoutJsonSchemas, message) }
     end
   end
 

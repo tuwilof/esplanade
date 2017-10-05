@@ -17,7 +17,7 @@ module Esplanade
       def json_schemas
         @json_schemas ||= tomogram.map { |action| action['body'] }
         return @json_schemas if @json_schemas != [] && @json_schemas.all? { |json_schema| json_schema != {} }
-        raise DocResponseWithoutJsonSchemas, without_json_schemas
+        raise ResponseDocWithoutJsonSchemas, without_json_schemas
       end
 
       def status

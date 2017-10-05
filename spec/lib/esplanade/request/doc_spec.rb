@@ -36,7 +36,7 @@ RSpec.describe Esplanade::Request::Doc do
         allow(subject).to receive(:method).and_return('method')
         allow(subject).to receive(:path).and_return('path')
       end
-      it { expect { subject.json_schema }.to raise_error(Esplanade::DocRequestWithoutJsonSchema, message) }
+      it { expect { subject.json_schema }.to raise_error(Esplanade::RequestDocWithoutJsonSchema, message) }
     end
   end
 

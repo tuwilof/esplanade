@@ -17,7 +17,7 @@ module Esplanade
       def json_schema
         @json_schema ||= tomogram.request
         return @json_schema unless @json_schema == {}
-        raise DocRequestWithoutJsonSchema, without_json_schema
+        raise RequestDocWithoutJsonSchema, without_json_schema
       end
 
       def method
