@@ -55,7 +55,7 @@ Esplanade.configure do |config|
   config.apib_path = 'doc/backend.apib'
 end
 
-require 'middlewares/your_middleware'
+require_relative '../middlewares/your_middleware'
 config.middleware.use YourMiddleware
 ```
 
