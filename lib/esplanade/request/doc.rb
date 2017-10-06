@@ -28,6 +28,8 @@ module Esplanade
 
       def responses
         @responses ||= tomogram.responses
+      rescue NotDocumented
+        []
       end
 
       private

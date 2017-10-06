@@ -46,5 +46,10 @@ RSpec.describe Esplanade::Request::Doc do
     let(:responses) { double }
     before { allow(subject).to receive(:tomogram).and_return(double(responses: responses)) }
     it { expect(subject.responses).to eq(responses) }
+
+    context 'request not documented' do
+      before { allow(subject).to receive(:tomogram).and_raise(Esplanade::Request::NotDocumented) }
+      it { expect(subject.responses).to eq([]) }
+    end
   end
 end
