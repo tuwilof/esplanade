@@ -15,11 +15,6 @@ RSpec.describe Esplanade::Response::Raw::Body do
       let(:raw_body) { [body] }
       it { expect(subject.to_string).to eq(body) }
     end
-
-    context 'can not get body of response' do
-      let(:raw_body) { nil }
-      it { expect { subject.to_string }.to raise_error(Esplanade::RawResponseError) }
-    end
   end
 
   describe '#to_hash' do

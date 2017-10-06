@@ -12,21 +12,6 @@ RSpec.describe Esplanade::Response::Doc do
     let(:request) { double(doc: double(responses: [tomogram])) }
     it { expect(subject.tomogram).to eq([tomogram]) }
 
-    context 'does not have request' do
-      let(:request) { nil }
-      it { expect { subject.tomogram }.to raise_error(Esplanade::DocResponseError) }
-    end
-
-    context 'does not have request documentation' do
-      let(:request) { double(doc: nil) }
-      it { expect { subject.tomogram }.to raise_error(Esplanade::DocResponseError) }
-    end
-
-    context 'does not have responses' do
-      let(:request) { double(doc: double(responses: nil)) }
-      it { expect { subject.tomogram }.to raise_error(Esplanade::DocResponseError) }
-    end
-
     context 'responses are empty' do
       let(:request) { double(doc: double(responses: []), raw: double(method: 'method', path: 'path')) }
       let(:raw_status) { 'status' }

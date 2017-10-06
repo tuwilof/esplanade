@@ -11,11 +11,6 @@ RSpec.describe Esplanade::Request::Doc do
     let(:raw) { double(method: double, path: double) }
     it { expect(subject.tomogram).to eq(tomogram) }
 
-    context 'does not have main documentation' do
-      let(:main_documentation) { nil }
-      it { expect { subject.tomogram }.to raise_error(Esplanade::DocRequestError) }
-    end
-
     context 'request not documented' do
       let(:tomogram) { nil }
       let(:raw) { double(method: 'method', path: 'path') }

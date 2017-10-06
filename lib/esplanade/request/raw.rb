@@ -9,14 +9,10 @@ module Esplanade
 
       def method
         @method ||= @env['REQUEST_METHOD']
-      rescue NoMethodError
-        raise RawRequestError
       end
 
       def path
         @path ||= @env['PATH_INFO']
-      rescue NoMethodError
-        raise RawRequestError
       end
 
       def body

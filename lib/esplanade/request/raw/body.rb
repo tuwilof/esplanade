@@ -11,8 +11,6 @@ module Esplanade
 
         def to_string
           @string ||= @env['rack.request.form_vars']
-        rescue NoMethodError
-          raise RawRequestError
         end
 
         def to_hash

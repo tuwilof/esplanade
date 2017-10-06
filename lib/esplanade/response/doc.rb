@@ -8,10 +8,8 @@ module Esplanade
 
       def tomogram
         @tomogram ||= @request.doc.responses.find_all { |response| response['status'] == @raw.status }
-        return @tomogram unless @tomogram == []
-        raise NotDocumented, message
-      rescue NoMethodError
-        raise DocResponseError
+        raise NotDocumented, message if @tomogram == []
+        @tomogram
       end
 
       def json_schemas

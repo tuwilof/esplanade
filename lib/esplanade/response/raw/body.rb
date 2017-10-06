@@ -13,8 +13,6 @@ module Esplanade
         def to_string
           @string ||= @raw_body.body rescue nil
           @string ||= @raw_body.first rescue nil
-          return @string unless @string.nil?
-          raise RawResponseError
         end
 
         def to_hash
