@@ -79,7 +79,7 @@ Error message: `{:method=>"method", :path=>"path", :body=>"{\"state\": 1"}`.
 
 #### Esplanade::Request::Invalid
 
-Error message: `{:method=>"method", :path=>"path", :body=>"body", :error=>"error"}`.
+Error message: `{:method=>"method", :path=>"path", :body=>"body", :error=>["error"]}`.
 
 ### Esplanade::Response::Error
 
@@ -97,7 +97,7 @@ Error message: `{:request=>{:method=>"method", :path=>"path"}, :status=>"status"
 
 #### Esplanade::Response::Invalid
 
-Error message: `{:request=>{:method=>"method", :path=>"path"}, :status=>"status", :body=>"body", :error=>"[error]"}`.
+Error message: `{:request=>{:method=>"method", :path=>"path"}, :status=>"status", :body=>"body", :error=>["error"]}`.
 
 ## Config
 
