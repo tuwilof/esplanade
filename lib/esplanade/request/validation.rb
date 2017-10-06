@@ -12,7 +12,7 @@ module Esplanade
       def valid!
         @error ||= JSON::Validator.fully_validate(@doc.json_schema, @raw.body.to_hash)
         return if @error == []
-        raise RequestInvalid, message
+        raise Invalid, message
       end
 
       private

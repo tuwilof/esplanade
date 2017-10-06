@@ -16,7 +16,7 @@ module Esplanade
                      more_than_one_json_schema
                    end
         return if @error == []
-        raise ResponseInvalid, message
+        raise Invalid, message
       end
 
       private

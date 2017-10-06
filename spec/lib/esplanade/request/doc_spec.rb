@@ -20,7 +20,7 @@ RSpec.describe Esplanade::Request::Doc do
       let(:tomogram) { nil }
       let(:raw) { double(method: 'method', path: 'path') }
       let(:message) { '{:method=>"method", :path=>"path"}' }
-      it { expect { subject.tomogram }.to raise_error(Esplanade::RequestNotDocumented, message) }
+      it { expect { subject.tomogram }.to raise_error(Esplanade::Request::NotDocumented, message) }
     end
   end
 

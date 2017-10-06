@@ -20,7 +20,7 @@ module Esplanade
         def to_hash
           @hash ||= MultiJson.load(to_string)
         rescue MultiJson::ParseError
-          raise ResponseBodyIsNotJson, message
+          raise BodyIsNotJson, message
         end
 
         private

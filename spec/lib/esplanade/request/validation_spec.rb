@@ -13,7 +13,7 @@ RSpec.describe Esplanade::Request::Validation do
       let(:raw) { double(method: 'method', path: 'path', body: double(to_string: 'body', to_hash: double)) }
       let(:message) { '{:method=>"method", :path=>"path", :body=>"body", :error=>"error"}' }
       before { allow(JSON::Validator).to receive(:fully_validate).and_return('error') }
-      it { expect { subject.valid! }.to raise_error(Esplanade::RequestInvalid, message) }
+      it { expect { subject.valid! }.to raise_error(Esplanade::Request::Invalid, message) }
     end
   end
 end

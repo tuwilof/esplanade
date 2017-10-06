@@ -31,7 +31,7 @@ RSpec.describe Esplanade::Response::Raw::Body do
       let(:raw_response) { double(status: 'status', body: double(to_string: 'body')) }
       let(:message) { '{:request=>{:method=>"method", :path=>"path"}, :status=>"status", :body=>"body"}' }
       before { allow(subject).to receive(:to_string).and_return('{"state": 1') }
-      it { expect { subject.to_hash }.to raise_error(Esplanade::ResponseBodyIsNotJson, message) }
+      it { expect { subject.to_hash }.to raise_error(Esplanade::Response::BodyIsNotJson, message) }
     end
   end
 end

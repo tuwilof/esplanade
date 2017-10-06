@@ -32,7 +32,7 @@ RSpec.describe Esplanade::Response::Doc do
       let(:raw_status) { 'status' }
       let(:request) { double(doc: double(responses: [tomogram]), raw: double(method: 'method', path: 'path')) }
       let(:message) { '{:request=>{:method=>"method", :path=>"path"}, :status=>"status"}' }
-      it { expect { subject.tomogram }.to raise_error(Esplanade::ResponseNotDocumented, message) }
+      it { expect { subject.tomogram }.to raise_error(Esplanade::Response::NotDocumented, message) }
     end
   end
 

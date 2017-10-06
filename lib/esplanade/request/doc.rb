@@ -9,7 +9,7 @@ module Esplanade
       def tomogram
         @tomogram ||= @main_documentation.find_request(method: @raw.method, path: @raw.path)
         return @tomogram unless @tomogram.nil?
-        raise RequestNotDocumented, not_documented
+        raise NotDocumented, not_documented
       rescue NoMethodError
         raise DocRequestError
       end
