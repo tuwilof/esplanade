@@ -11,14 +11,12 @@ module Esplanade
 
         def to_string
           @string ||= @env['rack.request.form_vars']
-        rescue NoMethodError
-          raise RawRequestError
         end
 
         def to_hash
           @hash ||= MultiJson.load(to_string)
         rescue MultiJson::ParseError
-          raise RequestBodyIsNotJson, message
+          raise BodyIsNotJson, message
         end
 
         private

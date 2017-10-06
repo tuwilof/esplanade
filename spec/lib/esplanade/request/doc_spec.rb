@@ -11,16 +11,11 @@ RSpec.describe Esplanade::Request::Doc do
     let(:raw) { double(method: double, path: double) }
     it { expect(subject.tomogram).to eq(tomogram) }
 
-    context 'does not have main documentation' do
-      let(:main_documentation) { nil }
-      it { expect { subject.tomogram }.to raise_error(Esplanade::DocRequestError) }
-    end
-
     context 'request not documented' do
       let(:tomogram) { nil }
       let(:raw) { double(method: 'method', path: 'path') }
       let(:message) { '{:method=>"method", :path=>"path"}' }
-      it { expect { subject.tomogram }.to raise_error(Esplanade::RequestNotDocumented, message) }
+      it { expect { subject.tomogram }.to raise_error(Esplanade::Request::NotDocumented, message) }
     end
   end
 
@@ -28,16 +23,6 @@ RSpec.describe Esplanade::Request::Doc do
     let(:json_schema) { double }
     before { allow(subject).to receive(:tomogram).and_return(double(request: json_schema)) }
     it { expect(subject.json_schema).to eq(json_schema) }
-
-    context 'does not have json-schema' do
-      let(:message) { '{:method=>"method", :path=>"path"}' }
-      before do
-        allow(subject).to receive(:tomogram).and_return(double(request: {}))
-        allow(subject).to receive(:method).and_return('method')
-        allow(subject).to receive(:path).and_return('path')
-      end
-      it { expect { subject.json_schema }.to raise_error(Esplanade::RequestDocWithoutJsonSchema, message) }
-    end
   end
 
   describe '#method' do
@@ -56,5 +41,10 @@ RSpec.describe Esplanade::Request::Doc do
     let(:responses) { double }
     before { allow(subject).to receive(:tomogram).and_return(double(responses: responses)) }
     it { expect(subject.responses).to eq(responses) }
+
+    context 'request not documented' do
+      before { allow(subject).to receive(:tomogram).and_raise(Esplanade::Request::NotDocumented) }
+      it { expect(subject.responses).to eq([]) }
+    end
   end
 end

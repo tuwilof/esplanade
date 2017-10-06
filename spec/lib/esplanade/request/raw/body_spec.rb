@@ -9,12 +9,6 @@ RSpec.describe Esplanade::Request::Raw::Body do
     let(:body) { double }
     let(:env) { { 'rack.request.form_vars' => body } }
     it { expect(subject.to_string).to eq(body) }
-
-    context 'can not get body of request' do
-      let(:env) { nil }
-      let(:raw_request) { double(method: 'method', path: 'path') }
-      it { expect { subject.to_string }.to raise_error(Esplanade::RawRequestError) }
-    end
   end
 
   describe '#to_hash' do
@@ -25,7 +19,7 @@ RSpec.describe Esplanade::Request::Raw::Body do
       let(:raw_request) { double(method: 'method', path: 'path') }
       let(:message) { '{:method=>"method", :path=>"path", :body=>"{\"state\": 1"}' }
       before { allow(subject).to receive(:to_string).and_return('{"state": 1') }
-      it { expect { subject.to_hash }.to raise_error(Esplanade::RequestBodyIsNotJson, message) }
+      it { expect { subject.to_hash }.to raise_error(Esplanade::Request::BodyIsNotJson, message) }
     end
   end
 end

@@ -15,8 +15,7 @@ module Esplanade
                    else
                      more_than_one_json_schema
                    end
-        return if @error == []
-        raise ResponseInvalid, message
+        raise Invalid, message if @error != []
       end
 
       private
@@ -44,7 +43,7 @@ module Esplanade
             path: @request.raw.path
           },
           status: @raw.status,
-          body: @raw.body.to_hash,
+          body: @raw.body.to_string,
           error: @error
         }
       end

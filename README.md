@@ -59,6 +59,46 @@ require_relative '../middlewares/your_middleware'
 config.middleware.use YourMiddleware
 ```
 
+## Esplanade::Error
+
+From him the `Esplanade::Request::Error` and `Esplanade::Response::Error` are inherited.
+
+### Esplanade::Request::Error
+
+From him the `Esplanade::Request::NotDocumented`, `Esplanade::Request::BodyIsNotJson` and `Esplanade::Request::Invalid` are inherited.
+
+#### Esplanade::Request::NotDocumented
+
+Error message: `{:method=>"method", :path=>"path"}`.
+
+#### Esplanade::Request::BodyIsNotJson
+
+Only if the documentation for this request indicates that `Content-Type: application/json`.
+
+Error message: `{:method=>"method", :path=>"path", :body=>"{\"state\": 1"}`.
+
+#### Esplanade::Request::Invalid
+
+Error message: `{:method=>"method", :path=>"path", :body=>"body", :error=>["error"]}`.
+
+### Esplanade::Response::Error
+
+From him the `Esplanade::Response::NotDocumented`, `Esplanade::Response::BodyIsNotJson` and `Esplanade::Response::Invalid` are inherited.
+
+#### Esplanade::Response::NotDocumented
+
+Error message: `{:request=>{:method=>"method", :path=>"path"}, :status=>"status"}`.
+
+#### Esplanade::Response::BodyIsNotJson
+
+Only if the documentation for all the responses of one request indicates that `Content-Type: application/json`.
+
+Error message: `{:request=>{:method=>"method", :path=>"path"}, :status=>"status", :body=>"body"}`.
+
+#### Esplanade::Response::Invalid
+
+Error message: `{:request=>{:method=>"method", :path=>"path"}, :status=>"status", :body=>"body", :error=>["error"]}`.
+
 ## Config
 
 ### apib_path

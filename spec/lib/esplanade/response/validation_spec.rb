@@ -16,13 +16,13 @@ RSpec.describe Esplanade::Response::Validation do
 
       context 'invalid' do
         let(:request) { double(raw: double(method: 'method', path: 'path')) }
-        let(:raw) { double(status: 'status', body: double(to_hash: double)) }
+        let(:raw) { double(status: 'status', body: double(to_string: 'body', to_hash: double)) }
         let(:message) do
           '{:request=>{:method=>"method", :path=>"path"}, '\
-          ':status=>"status", :body=>#<Double (anonymous)>, :error=>"[error]"}'
+          ':status=>"status", :body=>"body", :error=>["error"]}'
         end
-        before { allow(JSON::Validator).to receive(:fully_validate).and_return('[error]') }
-        it { expect { subject.valid! }.to raise_error(Esplanade::ResponseInvalid, message) }
+        before { allow(JSON::Validator).to receive(:fully_validate).and_return(['error']) }
+        it { expect { subject.valid! }.to raise_error(Esplanade::Response::Invalid, message) }
       end
     end
 
@@ -34,13 +34,13 @@ RSpec.describe Esplanade::Response::Validation do
 
       context 'invalid' do
         let(:request) { double(raw: double(method: 'method', path: 'path')) }
-        let(:raw) { double(status: 'status', body: double(to_hash: double)) }
+        let(:raw) { double(status: 'status', body: double(to_string: 'body', to_hash: double)) }
         let(:message) do
           '{:request=>{:method=>"method", :path=>"path"}, '\
-          ':status=>"status", :body=>#<Double (anonymous)>, :error=>["invalid"]}'
+          ':status=>"status", :body=>"body", :error=>["invalid"]}'
         end
         before { allow(JSON::Validator).to receive(:fully_validate).and_return(double) }
-        it { expect { subject.valid! }.to raise_error(Esplanade::ResponseInvalid, message) }
+        it { expect { subject.valid! }.to raise_error(Esplanade::Response::Invalid, message) }
       end
     end
   end
