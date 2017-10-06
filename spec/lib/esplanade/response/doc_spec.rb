@@ -40,26 +40,6 @@ RSpec.describe Esplanade::Response::Doc do
     let(:json_schema) { double }
     before { allow(subject).to receive(:tomogram).and_return([{ 'body' => json_schema }]) }
     it { expect(subject.json_schemas).to eq([json_schema]) }
-
-    context 'json-schemas is empty' do
-      let(:message) { '{:request=>{:method=>"method", :path=>"path"}, :status=>"status"}' }
-      let(:request) { double(raw: double(method: 'method', path: 'path')) }
-      before do
-        allow(subject).to receive(:tomogram).and_return([])
-        allow(subject).to receive(:status).and_return('status')
-      end
-      it { expect { subject.json_schemas }.to raise_error(Esplanade::ResponseDocWithoutJsonSchemas, message) }
-    end
-
-    context 'not all json-schema' do
-      let(:message) { '{:request=>{:method=>"method", :path=>"path"}, :status=>"status"}' }
-      let(:request) { double(raw: double(method: 'method', path: 'path')) }
-      before do
-        allow(subject).to receive(:tomogram).and_return([{ 'body' => {} }])
-        allow(subject).to receive(:status).and_return('status')
-      end
-      it { expect { subject.json_schemas }.to raise_error(Esplanade::ResponseDocWithoutJsonSchemas, message) }
-    end
   end
 
   describe '#status' do

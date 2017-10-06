@@ -28,16 +28,6 @@ RSpec.describe Esplanade::Request::Doc do
     let(:json_schema) { double }
     before { allow(subject).to receive(:tomogram).and_return(double(request: json_schema)) }
     it { expect(subject.json_schema).to eq(json_schema) }
-
-    context 'does not have json-schema' do
-      let(:message) { '{:method=>"method", :path=>"path"}' }
-      before do
-        allow(subject).to receive(:tomogram).and_return(double(request: {}))
-        allow(subject).to receive(:method).and_return('method')
-        allow(subject).to receive(:path).and_return('path')
-      end
-      it { expect { subject.json_schema }.to raise_error(Esplanade::RequestDocWithoutJsonSchema, message) }
-    end
   end
 
   describe '#method' do

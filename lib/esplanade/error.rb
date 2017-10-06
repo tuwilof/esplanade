@@ -5,8 +5,4 @@ module Esplanade
   class DocResponseError < Error; end
   class RawRequestError  < Error; end
   class RawResponseError < Error; end
-
-  class RequestDocWithoutJsonSchema < Error; end
-
-  class ResponseDocWithoutJsonSchemas < Error; end
 end

@@ -9,15 +9,13 @@ module Esplanade
       def tomogram
         @tomogram ||= @main_documentation.find_request(method: @raw.method, path: @raw.path)
         return @tomogram unless @tomogram.nil?
-        raise NotDocumented, not_documented
+        raise NotDocumented, message
       rescue NoMethodError
         raise DocRequestError
       end
 
       def json_schema
         @json_schema ||= tomogram.request
-        return @json_schema unless @json_schema == {}
-        raise RequestDocWithoutJsonSchema, without_json_schema
       end
 
       def method
@@ -34,17 +32,10 @@ module Esplanade
 
       private
 
-      def not_documented
+      def message
         {
           method: @raw.method,
           path: @raw.path
-        }
-      end
-
-      def without_json_schema
-        {
-          method: method,
-          path: path
         }
       end
     end
