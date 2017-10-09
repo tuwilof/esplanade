@@ -15,6 +15,11 @@ RSpec.describe Esplanade::Request::Raw::Body do
     before { allow(subject).to receive(:to_string).and_return('{"state": 1}') }
     it { expect(subject.to_hash).to eq('state' => 1) }
 
+    context 'body nil' do
+      before { allow(subject).to receive(:to_string).and_return(nil) }
+      it { expect(subject.to_hash).to eq({}) }
+    end
+
     context 'can not parse body of request' do
       let(:raw_request) { double(method: 'method', path: 'path') }
       let(:message) { '{:method=>"method", :path=>"path", :body=>"{\"state\": 1"}' }
