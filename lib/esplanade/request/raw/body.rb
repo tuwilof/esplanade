@@ -14,7 +14,11 @@ module Esplanade
         end
 
         def to_hash
-          @hash ||= MultiJson.load(to_string)
+          @hash ||= if to_string.nil?
+                      {}
+                    else
+                      MultiJson.load(to_string)
+                    end
         rescue MultiJson::ParseError
           raise BodyIsNotJson, message
         end
