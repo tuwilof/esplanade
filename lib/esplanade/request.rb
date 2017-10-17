@@ -5,9 +5,10 @@ require 'esplanade/request/validation'
 module Esplanade
   class Request
     class Error < Esplanade::Error; end
-    class NotDocumented < Error; end
-    class BodyIsNotJson < Error; end
-    class Invalid       < Error; end
+    class PrefixNotMatch < Error; end
+    class NotDocumented  < Error; end
+    class BodyIsNotJson  < Error; end
+    class Invalid        < Error; end
 
     def initialize(documentation, env)
       @documentation = documentation

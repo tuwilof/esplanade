@@ -7,9 +7,16 @@ RSpec.describe Esplanade::Request::Doc do
 
   describe '#tomogram' do
     let(:tomogram) { double }
-    let(:main_documentation) { double(find_request: tomogram) }
+    let(:main_documentation) { double(find_request: tomogram, prefix_match?: true) }
     let(:raw) { double(method: double, path: double) }
     it { expect(subject.tomogram).to eq(tomogram) }
+
+    context 'prefix not match' do
+      let(:main_documentation) { double(prefix_match?: false) }
+      let(:raw) { double(method: 'method', path: 'path') }
+      let(:message) { '{:method=>"method", :path=>"path"}' }
+      it { expect { subject.tomogram }.to raise_error(Esplanade::Request::PrefixNotMatch, message) }
+    end
 
     context 'request not documented' do
       let(:tomogram) { nil }
