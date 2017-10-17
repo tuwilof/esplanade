@@ -70,7 +70,11 @@ From him the `Esplanade::Request::Error` and `Esplanade::Response::Error` are in
 
 ### Esplanade::Request::Error
 
-From him the `Esplanade::Request::NotDocumented`, `Esplanade::Request::BodyIsNotJson` and `Esplanade::Request::Invalid` are inherited.
+From him the `Esplanade::Request::PrefixNotMatch`, `Esplanade::Request::NotDocumented`, `Esplanade::Request::BodyIsNotJson` and `Esplanade::Request::Invalid` are inherited.
+
+#### Esplanade::Request::PrefixNotMatch
+
+Error message: `{:method=>"method", :path=>"path"}`.
 
 #### Esplanade::Request::NotDocumented
 
