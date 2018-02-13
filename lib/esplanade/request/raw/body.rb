@@ -10,7 +10,7 @@ module Esplanade
         end
 
         def to_string
-          @string ||= @env['rack.request.form_vars']
+          @string ||= @env["rack.input"].read
         end
 
         def to_hash
