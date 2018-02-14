@@ -1,5 +1,10 @@
 # Change log
 
+### 1.1.2 - 2018-02-14
+
+* bug fixes
+  * add rewind rack.input
+
 ### 1.1.1 - 2018-02-13
 
 * bug fixes
