@@ -1,4 +1,6 @@
 require 'esplanade/middleware'
+require 'esplanade/safe_middleware'
+require 'esplanade/dangerous_middleware'
 require 'esplanade/configuration'
 
 module Esplanade
