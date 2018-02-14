@@ -10,7 +10,10 @@ module Esplanade
         end
 
         def to_string
-          @string ||= @env['rack.input'].read
+          return @string if @string
+          @string = @env['rack.input'].read
+          @env['rack.input'].rewind
+          @string
         end
 
         def to_hash

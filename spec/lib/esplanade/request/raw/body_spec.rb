@@ -7,7 +7,7 @@ RSpec.describe Esplanade::Request::Raw::Body do
 
   describe '#to_string' do
     let(:body) { double }
-    let(:env) { { 'rack.input' => double(read: body) } }
+    let(:env) { { 'rack.input' => double(read: body, rewind: nil) } }
     it { expect(subject.to_string).to eq(body) }
   end
 
