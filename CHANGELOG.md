@@ -1,5 +1,14 @@
 # Change log
 
+### 1.2.0 - 2018-02-15
+
+* features
+  * add safe and dangerous middleware
+  * add middleware for check custom response
+* deprecations
+  * configure
+  * Esplanade::Middleware
+
 ### 1.1.2 - 2018-02-14
 
 * bug fixes
