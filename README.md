@@ -30,38 +30,35 @@ Or install it yourself as:
 
 ## Usage
 
-Example:
-
-`middlewares/your_middleware.rb`
-
-```ruby
-class YourMiddleware < Esplanade::Middleware
-  def call(env)
-    request = Esplanade::Request.new(@documentation, env)
-    request.validation.valid!
-
-    status, headers, body = @app.call(env)
-
-    response = Esplanade::Response.new(request, status, body)
-    response.validation.valid!
-
-    [status, headers, body]
-  rescue Esplanade::Error => e
-    your_render_error(e)
-  end
-end
-```
-
 `config/application.rb`
 
 ```ruby
-require 'esplanade'
-Esplanade.configure do |config|
-  config.apib_path = 'doc/backend.apib'
-end
+config.middleware.use Esplanade::SafeMiddleware, apib_path: 'doc.apib'
+```
 
-require_relative '../middlewares/your_middleware'
-config.middleware.use YourMiddleware
+## Middleware
+
+### Esplanade::SafeMiddleware
+
+Only debug logger.
+
+### Esplanade::DangerousMiddleware
+
+It throws errors, so you will need to add your own middleware for processing.
+
+```ruby
+    config.middleware.use YourMiddleware
+    config.middleware.use Esplanade::DangerousMiddleware, apib_path: 'doc.apib'
+```
+
+### Esplanade::CheckCustomResponseMiddleware
+
+If you want to be sure that you have documented new custom responses.
+
+```ruby
+    config.middleware.use Esplanade::CheckCustomResponseMiddleware, apib_path: 'doc.apib'
+    config.middleware.use YourMiddleware
+    config.middleware.use Esplanade::DangerousMiddleware, apib_path: 'doc.apib'
 ```
 
 ## Esplanade::Error
@@ -108,7 +105,7 @@ Error message: `{:request=>{:method=>"method", :path=>"path"}, :status=>"status"
 
 Error message: `{:request=>{:method=>"method", :path=>"path"}, :status=>"status", :body=>"body", :error=>["error"]}`.
 
-## Config
+## Middleware args
 
 ### apib_path
 

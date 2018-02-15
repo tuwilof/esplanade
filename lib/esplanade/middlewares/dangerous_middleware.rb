@@ -3,7 +3,7 @@ require 'esplanade/request'
 require 'esplanade/response'
 
 module Esplanade
-  class Middleware
+  class DangerousMiddleware
     def initialize(
       app,
       prefix: Esplanade.configuration.prefix,
@@ -19,7 +19,14 @@ module Esplanade
     end
 
     def call(env)
+      request = Esplanade::Request.new(@documentation, env)
+      request.validation.valid!
+
       status, headers, body = @app.call(env)
+
+      response = Esplanade::Response.new(request, status, body)
+      response.validation.valid!
+
       [status, headers, body]
     end
   end

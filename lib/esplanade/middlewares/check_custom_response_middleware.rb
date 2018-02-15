@@ -3,12 +3,12 @@ require 'esplanade/request'
 require 'esplanade/response'
 
 module Esplanade
-  class Middleware
+  class CheckCustomResponseMiddleware
     def initialize(
       app,
-      prefix: Esplanade.configuration.prefix,
-      apib_path: Esplanade.configuration.apib_path,
-      drafter_yaml_path: Esplanade.configuration.drafter_yaml_path
+        prefix: Esplanade.configuration.prefix,
+        apib_path: Esplanade.configuration.apib_path,
+        drafter_yaml_path: Esplanade.configuration.drafter_yaml_path
     )
       @app = app
       @documentation = Tomograph::Tomogram.new(
@@ -19,7 +19,13 @@ module Esplanade
     end
 
     def call(env)
+      request = Esplanade::Request.new(@documentation, env)
+
       status, headers, body = @app.call(env)
+
+      response = Esplanade::Response.new(request, status, body)
+      response.validation.valid!
+
       [status, headers, body]
     end
   end
