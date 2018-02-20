@@ -11,7 +11,8 @@ module Esplanade
 
       def valid!
         @error ||= JSON::Validator.fully_validate(@doc.json_schema, @raw.body.to_hash)
-        raise Invalid, message if @error != []
+
+        raise Invalid, message unless @error.empty?
       end
 
       private
@@ -19,9 +20,9 @@ module Esplanade
       def message
         {
           method: @raw.method,
-          path: @raw.path,
-          body: @raw.body.to_string,
-          error: @error
+          path:   @raw.path,
+          body:   @raw.body.to_hash,
+          error:  @error
         }
       end
     end

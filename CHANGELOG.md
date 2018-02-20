@@ -1,5 +1,10 @@
 # Change log
 
+### 1.2.1 - 2018-02-20
+
+* improvement
+  * more information about the invalid request
+
 ### 1.2.0 - 2018-02-15
 
 * features
