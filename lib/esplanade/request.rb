@@ -1,15 +1,10 @@
 require 'esplanade/request/doc'
 require 'esplanade/request/raw'
 require 'esplanade/request/validation'
+require 'esplanade/request/error'
 
 module Esplanade
   class Request
-    class Error < Esplanade::Error; end
-    class PrefixNotMatch < Error; end
-    class NotDocumented  < Error; end
-    class BodyIsNotJson  < Error; end
-    class Invalid        < Error; end
-
     def initialize(documentation, env)
       @documentation = documentation
       @env = env
