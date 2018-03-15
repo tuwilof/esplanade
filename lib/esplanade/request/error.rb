@@ -4,8 +4,22 @@ module Esplanade
 
     class PrefixNotMatch        < Error; end
     class NotDocumented         < Error
+      attr_reader :method, :path, :content_type
+
+      def initialize(method:, path:, content_type:)
+        @method = method
+        @path   = path
+        @content_type = content_type
+
+        super(to_hash)
+      end
+
       def to_hash
-        {}
+        {
+          method: @method,
+          path: @path,
+          content_type: @content_type
+        }
       end
     end
     class ContentTypeIsNotJson  < Error; end
@@ -16,7 +30,7 @@ module Esplanade
     end
 
     class Invalid < Error
-      attr_reader :method, :path, :body, :error
+      attr_reader :method, :path, :content_type, :body, :error
 
       def initialize(method:, path:, content_type:, body:, error:)
         @method = method
