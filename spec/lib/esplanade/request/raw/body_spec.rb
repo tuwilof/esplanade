@@ -21,8 +21,8 @@ RSpec.describe Esplanade::Request::Raw::Body do
     end
 
     context 'can not parse body of request' do
-      let(:raw_request) { double(method: 'method', path: 'path') }
-      let(:message) { '{:method=>"method", :path=>"path", :body=>"{\"state\": 1"}' }
+      let(:raw_request) { double(method: 'method', path: 'path', content_type: 'application/json') }
+      let(:message) { '{:method=>"method", :path=>"path", :content_type=>"application/json", :body=>"{\"state\": 1"}' }
       before { allow(subject).to receive(:to_string).and_return('{"state": 1') }
       it { expect { subject.to_hash }.to raise_error(Esplanade::Request::BodyIsNotJson, message) }
     end

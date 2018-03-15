@@ -32,6 +32,7 @@ module Esplanade
           {
             method: @raw_request.method,
             path: @raw_request.path,
+            content_type: @raw_request.content_type,
             body: to_string
           }
         end
