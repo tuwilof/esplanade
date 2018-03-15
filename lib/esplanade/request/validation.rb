@@ -31,7 +31,7 @@ module Esplanade
           method: @raw.method,
           path:   @raw.path,
           content_type: @raw.content_type,
-          body:   @raw.body.to_string,
+          body:   @raw.body.to_hash,
           error:  @error
         }
       end

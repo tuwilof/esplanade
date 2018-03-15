@@ -11,7 +11,7 @@ RSpec.describe Esplanade::Request::Validation do
 
     context 'invalid' do
       let(:raw) { double(method: 'method', path: 'path', content_type: 'application/json', body: double(to_hash: {key: 'value'}, to_string: '')) }
-      let(:message) { {method: 'method', path: 'path', content_type: 'application/json', body: '', error: ['error']} }
+      let(:message) { {method: 'method', path: 'path', content_type: 'application/json', body: {key: 'value'}, error: ['error']} }
       before { allow(JSON::Validator).to receive(:fully_validate).and_return(['error']) }
       it { expect { subject.valid! }.to raise_error(Esplanade::Request::Invalid, message.to_s) }
     end
