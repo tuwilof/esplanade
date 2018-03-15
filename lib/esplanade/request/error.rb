@@ -22,9 +22,27 @@ module Esplanade
         }
       end
     end
-    class ContentTypeIsNotJson  < Error; end
-    class BodyIsNotJson         < Error
+    class ContentTypeIsNotJson  < Error
       attr_reader :method, :path, :content_type
+
+      def initialize(method:, path:, content_type:)
+        @method = method
+        @path   = path
+        @content_type = content_type
+
+        super(to_hash)
+      end
+
+      def to_hash
+        {
+          method: @method,
+          path: @path,
+          content_type: @content_type
+        }
+      end
+    end
+    class BodyIsNotJson         < Error
+      attr_reader :method, :path, :content_type, :body
 
       def initialize(method:, path:, content_type:, body:)
         @method = method
