@@ -3,7 +3,7 @@
 ### 1.3.0 - 2018-03-16
 
 * features
-  * add Esplanade::Request::ContentTypeIsNotJson erro
+  * add Esplanade::Request::ContentTypeIsNotJson error
   * add reduced version message about request body
 
 ### 1.2.1 - 2018-02-20
