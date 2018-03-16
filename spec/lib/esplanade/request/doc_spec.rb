@@ -7,7 +7,7 @@ RSpec.describe Esplanade::Request::Doc do
 
   describe '#tomogram' do
     let(:tomogram) { double }
-    let(:main_documentation) { double(find_request: tomogram, prefix_match?: true) }
+    let(:main_documentation) { double(find_request_with_content_type: tomogram, prefix_match?: true) }
     let(:raw) { double(method: double, path: double, content_type: double) }
     it { expect(subject.tomogram).to eq(tomogram) }
 
