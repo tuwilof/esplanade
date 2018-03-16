@@ -18,6 +18,10 @@ module Esplanade
       def body
         @body ||= Body.new(self, @env)
       end
+
+      def content_type
+        @content_type ||= @env['CONTENT_TYPE']
+      end
     end
   end
 end

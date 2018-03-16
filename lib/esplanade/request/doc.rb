@@ -8,7 +8,11 @@ module Esplanade
 
       def tomogram
         raise PrefixNotMatch, message unless @main_documentation.prefix_match?(@raw.path)
-        @tomogram = @main_documentation.find_request(method: @raw.method, path: @raw.path)
+        @tomogram = @main_documentation.find_request_with_content_type(
+          method: @raw.method,
+          path: @raw.path,
+          content_type: @raw.content_type
+        )
         raise NotDocumented, message if @tomogram.nil?
         @tomogram
       end
@@ -25,6 +29,10 @@ module Esplanade
         @path ||= tomogram.path.to_s
       end
 
+      def content_type
+        @content_type ||= tomogram.content_type.to_s
+      end
+
       def responses
         @responses ||= tomogram.responses
       rescue NotDocumented
@@ -36,7 +44,8 @@ module Esplanade
       def message
         {
           method: @raw.method,
-          path: @raw.path
+          path: @raw.path,
+          content_type: @raw.content_type
         }
       end
     end

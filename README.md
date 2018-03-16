@@ -71,21 +71,23 @@ From him the `Esplanade::Request::PrefixNotMatch`, `Esplanade::Request::NotDocum
 
 #### Esplanade::Request::PrefixNotMatch
 
-Error message: `{:method=>"method", :path=>"path"}`.
+Error message: `{:method=>"method", :path=>"path", :content_type=>"content_type"}`.
 
 #### Esplanade::Request::NotDocumented
 
-Error message: `{:method=>"method", :path=>"path"}`.
+Error message: `{:method=>"method", :path=>"path", :content_type=>"content_type"}`.
+
+#### Esplanade::Request::ContentTypeIsNotJson
+
+Error message: `{:method=>"method", :path=>"path", :content_type=>"content_type"}`.
 
 #### Esplanade::Request::BodyIsNotJson
 
-Only if the documentation for this request indicates that `Content-Type: application/json`.
-
-Error message: `{:method=>"method", :path=>"path", :body=>"{\"state\": 1"}`.
+Error message: `{:method=>"method", :path=>"path", :content_type=>"content_type", :body=>"{\"state\": 1"}`.
 
 #### Esplanade::Request::Invalid
 
-Error message: `{:method=>"method", :path=>"path", :body=>"body", :error=>["error"]}`.
+Error message: `{:method=>"method", :path=>"path", :content_type=>"content_type", :body=>"body", :error=>["error"]}`.
 
 ### Esplanade::Response::Error
 
