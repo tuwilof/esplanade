@@ -1,8 +1,14 @@
 # Change log
 
+### 1.3.0 - 2018-03-16
+
+* features
+  * add Esplanade::Request::ContentTypeIsNotJson erro
+  * add reduced version message about request body
+
 ### 1.2.1 - 2018-02-20
 
-* improvement
+* features
   * more information about the invalid request
 
 ### 1.2.0 - 2018-02-15
@@ -16,12 +22,12 @@
 
 ### 1.1.2 - 2018-02-14
 
-* bug fixes
+* fixes
   * add rewind rack.input
 
 ### 1.1.1 - 2018-02-13
 
-* bug fixes
+* fixes
   * read body if Content-Type application/json
 
 ### 1.1.0 - 2017-10-18
@@ -31,5 +37,5 @@
 
 ### 1.0.1 - 2017-10-09
 
-* bug fixes
+* fixes
   * allow request body to be nil
