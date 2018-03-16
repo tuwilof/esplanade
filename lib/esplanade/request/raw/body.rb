@@ -26,6 +26,14 @@ module Esplanade
           raise BodyIsNotJson, message
         end
 
+        def reduced_version
+          @reduced_version ||= if to_string.size >= 1000
+            "#{to_string[0..499]}...#{to_string[500..-1]}"
+          else
+            to_string
+          end
+        end
+
         private
 
         def message
@@ -33,7 +41,7 @@ module Esplanade
             method: @raw_request.method,
             path: @raw_request.path,
             content_type: @raw_request.content_type,
-            body: to_string
+            body: reduced_version
           }
         end
       end
