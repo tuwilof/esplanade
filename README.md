@@ -7,7 +7,7 @@
 [![Gem Version](https://badge.fury.io/rb/esplanade.svg)](https://badge.fury.io/rb/esplanade)
 [![Build Status](https://travis-ci.org/funbox/esplanade.svg?branch=master)](https://travis-ci.org/funbox/esplanade)
 
-This gem will help you validation and sinhronize your API in strict accordance to the documentation in
+This gem will help you to validate and synchronize your API in strict accordance to the documentation in
 [API Blueprint](https://apiblueprint.org/) format.
 To do this it automatically searches received requestes and responses in the documentation and run validates
 json-schemas.
