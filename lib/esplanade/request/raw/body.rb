@@ -17,17 +17,13 @@ module Esplanade
         end
 
         def to_hash
-          @hash ||= if to_string.nil?
-                      {}
-                    else
-                      MultiJson.load(to_string)
-                    end
+          @hash ||= MultiJson.load(to_string)
         rescue MultiJson::ParseError
           raise BodyIsNotJson, message
         end
 
         def reduced_version
-          @reduced_version ||= if to_string.size >= 1000
+          @reduced_version ||= if to_string && to_string.size >= 1000
             "#{to_string[0..499]}...#{to_string[500..-1]}"
           else
             to_string
