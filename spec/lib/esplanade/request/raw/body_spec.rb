@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe Esplanade::Request::Raw::Body do
   subject { described_class.new(raw_request, env) }
-  let(:raw_request) { double }
+  let(:raw_request) { double(method: 'method', path: 'path', content_type: 'application/json') }
   let(:env) { double }
 
   describe '#to_string' do
@@ -43,12 +43,18 @@ RSpec.describe Esplanade::Request::Raw::Body do
     it { expect(subject.to_hash).to eq('state' => 1) }
 
     context 'body nil' do
+      let(:message) { '{:method=>"method", :path=>"path", :content_type=>"application/json", :body=>nil}' }
       before { allow(subject).to receive(:to_string).and_return(nil) }
-      it { expect(subject.to_hash).to eq({}) }
+      it { expect { subject.to_hash }.to raise_error(Esplanade::Request::BodyIsNotJson, message) }
+    end
+
+    context 'body is empty' do
+      let(:message) { '{:method=>"method", :path=>"path", :content_type=>"application/json", :body=>" "}' }
+      before { allow(subject).to receive(:to_string).and_return(' ') }
+      it { expect { subject.to_hash }.to raise_error(Esplanade::Request::BodyIsNotJson, message) }
     end
 
     context 'can not parse body of request' do
-      let(:raw_request) { double(method: 'method', path: 'path', content_type: 'application/json') }
       let(:message) { '{:method=>"method", :path=>"path", :content_type=>"application/json", :body=>"{\"state\": 1"}' }
       before { allow(subject).to receive(:to_string).and_return('{"state": 1') }
       it { expect { subject.to_hash }.to raise_error(Esplanade::Request::BodyIsNotJson, message) }
