@@ -6,9 +6,9 @@ module Esplanade
   class CheckCustomResponseMiddleware
     def initialize(
       app,
-        prefix: Esplanade.configuration.prefix,
-        apib_path: Esplanade.configuration.apib_path,
-        drafter_yaml_path: Esplanade.configuration.drafter_yaml_path
+      prefix: Esplanade.configuration.prefix,
+      apib_path: Esplanade.configuration.apib_path,
+      drafter_yaml_path: Esplanade.configuration.drafter_yaml_path
     )
       @app = app
       @documentation = Tomograph::Tomogram.new(
