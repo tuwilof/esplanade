@@ -1,5 +1,10 @@
 # Change log
 
+### 1.4.0 - 2019-08-19
+
+* features
+  * add details for Esplanade::Response::Error
+
 ### 1.3.0 - 2018-03-16
 
 * features
