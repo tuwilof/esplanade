@@ -1,14 +1,10 @@
 require 'esplanade/response/doc'
 require 'esplanade/response/raw'
 require 'esplanade/response/validation'
+require 'esplanade/response/error'
 
 module Esplanade
   class Response
-    class Error < Esplanade::Error; end
-    class NotDocumented < Error; end
-    class BodyIsNotJson < Error; end
-    class Invalid       < Error; end
-
     attr_reader :request
 
     def initialize(request, status, raw_body)

@@ -11,6 +11,7 @@ module Esplanade
 
         def to_string
           return @string if @string
+
           @string = @env['rack.input'].read
           @env['rack.input'].rewind
           @string
@@ -24,10 +25,10 @@ module Esplanade
 
         def reduced_version
           @reduced_version ||= if to_string && to_string.size >= 1000
-            "#{to_string[0..499]}...#{to_string[500..-1]}"
-          else
-            to_string
-          end
+                                 "#{to_string[0..499]}...#{to_string[500..-1]}"
+                               else
+                                 to_string
+                               end
         end
 
         private

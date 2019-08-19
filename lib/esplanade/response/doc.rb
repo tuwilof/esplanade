@@ -9,6 +9,7 @@ module Esplanade
       def tomogram
         @tomogram ||= @request.doc.responses.find_all { |response| response['status'] == @raw.status }
         raise NotDocumented, message if @tomogram == []
+
         @tomogram
       end
 
