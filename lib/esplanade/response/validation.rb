@@ -15,7 +15,7 @@ module Esplanade
                    else
                      more_than_one_json_schema
                    end
-        raise Invalid, message if @error != []
+        raise Invalid.new(**message) if @error != []
       end
 
       private
