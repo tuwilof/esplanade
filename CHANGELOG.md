@@ -1,5 +1,11 @@
 # Change log
 
+### 1.4.1 - 2020-04-07
+
+* improvements
+  * updated dependenses
+  * fixed warnings on ruby 2.7
+
 ### 1.4.0 - 2019-08-19
 
 * features

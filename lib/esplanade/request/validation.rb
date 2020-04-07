@@ -10,11 +10,11 @@ module Esplanade
       end
 
       def valid!
-        raise ContentTypeIsNotJson, mini_message unless @doc.content_type == 'application/json'
+        raise ContentTypeIsNotJson.new(**mini_message) unless @doc.content_type == 'application/json'
 
         @error ||= JSON::Validator.fully_validate(@doc.json_schema, @raw.body.to_hash)
 
-        raise Invalid, message unless @error.empty?
+        raise Invalid.new(**message) unless @error.empty?
       end
 
       private
