@@ -1,6 +1,6 @@
 # Change log
 
-### 1.4.1 - 2020-04-07
+### 1.5.0 - 2020-04-07
 
 * improvements
   * updated dependenses
