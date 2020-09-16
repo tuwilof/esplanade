@@ -12,12 +12,32 @@ module Esplanade
       def valid!
         raise ContentTypeIsNotJson.new(**mini_message) unless @doc.content_type == 'application/json'
 
-        @error ||= JSON::Validator.fully_validate(@doc.json_schema, @raw.body.to_hash)
+        @error ||= if @doc.json_schemas.size == 1
+                     one_json_schema
+                   else
+                     more_than_one_json_schema
+                   end
 
         raise Invalid.new(**message) unless @error.empty?
       end
 
       private
+
+      def one_json_schema
+        JSON::Validator.fully_validate(@doc.json_schemas.first, @raw.body.to_hash)
+      end
+
+      def more_than_one_json_schema
+        main_res = @doc.json_schemas.each do |json_schema|
+          res = JSON::Validator.fully_validate(json_schema, @raw.body.to_hash)
+          break res if res == []
+        end
+        if main_res != []
+          ['invalid']
+        else
+          []
+        end
+      end
 
       def mini_message
         {

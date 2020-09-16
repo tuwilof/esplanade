@@ -26,10 +26,10 @@ RSpec.describe Esplanade::Request::Doc do
     end
   end
 
-  describe '#json_schema' do
+  describe '#json_schemas' do
     let(:json_schema) { double }
-    before { allow(subject).to receive(:tomogram).and_return(double(request: json_schema)) }
-    it { expect(subject.json_schema).to eq(json_schema) }
+    before { allow(subject).to receive(:tomogram).and_return(double(requests: [json_schema])) }
+    it { expect(subject.json_schemas).to eq([json_schema]) }
   end
 
   describe '#method' do
