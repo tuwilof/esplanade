@@ -100,8 +100,9 @@ Error message format:
 
 ```ruby
 {
-  :method => "method", 
-  :path => "path", 
+  :method => "method",
+  :path => "path",
+  :raw_path => "path",
   :content_type => "content_type"
 }
 ```
@@ -114,6 +115,7 @@ Error message format:
 {
   :method => "method",
   :path => "path",
+  :raw_path => "path",
   :content_type => "content_type"
 }
 ```
@@ -126,6 +128,7 @@ Error message format:
 {
   :method => "method",
   :path => "path",
+  :raw_path => "path",
   :content_type => "content_type"
 }
 ```
@@ -138,6 +141,7 @@ Error message format:
 {
   :method => "method",
   :path => "path",
+  :raw_path => "path",
   :content_type => "content_type",
   :body => "body"
 }
@@ -151,6 +155,7 @@ Error message format:
 {
   :method => "method",
   :path => "path",
+  :raw_path => "path",
   :content_type => "content_type",
   :body => "body",
   :error => ["error"]
@@ -169,7 +174,8 @@ Error message format:
 {
   :request => {
     :method => "method",
-    :path => "path"
+    :path => "path",
+    :raw_path => "path"
   },
   :status => "status"
 }
@@ -185,7 +191,8 @@ Error message format:
 {
   :request => {
     :method => "method",
-    :path => "path"
+    :path => "path",
+    :raw_path => "path"
   },
   :status => "status",
   :body => "body"
@@ -200,7 +207,8 @@ Error message format:
 {
   :request => {
     :method => "method",
-    :path => "path"
+    :path => "path",
+    :raw_path => "path"
   },
   :status => "status",
   :body => "body",

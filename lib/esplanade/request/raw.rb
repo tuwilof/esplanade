@@ -15,6 +15,10 @@ module Esplanade
         @path ||= @env['PATH_INFO']
       end
 
+      def raw_path
+        @raw_path ||= "#{@env['PATH_INFO']}/#{@env['QUERY_STRING']}"
+      end
+
       def body
         @body ||= Body.new(self, @env)
       end

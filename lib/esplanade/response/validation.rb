@@ -40,7 +40,8 @@ module Esplanade
         {
           request: {
             method: @request.raw.method,
-            path: @request.raw.path
+            path: @request.raw.path,
+            raw_path: @request.raw.raw_path
           },
           status: @raw.status,
           body: @raw.body.to_string,
