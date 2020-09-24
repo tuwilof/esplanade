@@ -132,6 +132,8 @@ Error message format:
 
 #### Esplanade::Request::BodyIsNotJson
 
+Throws an error also when the body is empty and equal nil.
+
 Error message format:
 
 ```ruby
