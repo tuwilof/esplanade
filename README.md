@@ -161,6 +161,20 @@ Error message format:
 
 Parent class for those described below. Inherited from `Esplanade::Error`.
 
+#### Esplanade::Response::PrefixNotMatch
+
+Error message format: 
+
+```ruby
+{
+  :request => {
+    :method => "method",
+    :path => "path"
+  },
+  :status => "status"
+}
+```
+
 #### Esplanade::Response::NotDocumented
 
 Error message format:
