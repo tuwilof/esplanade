@@ -20,7 +20,7 @@ module Esplanade
       end
 
       def content_type
-        @content_type ||= @env['CONTENT_TYPE']
+        @content_type ||= @env['CONTENT_TYPE'].to_s.split(';').first
       end
     end
   end
