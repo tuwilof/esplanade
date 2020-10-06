@@ -47,6 +47,7 @@ module Esplanade
         {
           method: @raw.method,
           path: @raw.path,
+          raw_path: @raw.raw_path,
           content_type: @raw.content_type
         }
       end

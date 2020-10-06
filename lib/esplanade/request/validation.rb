@@ -23,6 +23,7 @@ module Esplanade
         {
           method: @doc.method,
           path: @doc.path,
+          raw_path: @raw.raw_path,
           content_type: @doc.content_type
         }
       end
@@ -31,6 +32,7 @@ module Esplanade
         {
           method: @raw.method,
           path: @raw.path,
+          raw_path: @raw.raw_path,
           content_type: @raw.content_type,
           body: @raw.body.to_hash,
           error: @error

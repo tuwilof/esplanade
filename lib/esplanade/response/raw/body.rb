@@ -27,7 +27,8 @@ module Esplanade
           {
             request: {
               method: @request.raw.method,
-              path: @request.raw.path
+              path: @request.raw.path,
+              raw_path: @request.raw.raw_path
             },
             status: @raw_response.status,
             body: @raw_response.body.to_string

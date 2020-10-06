@@ -11,9 +11,9 @@ RSpec.describe Esplanade::Request::Validation do
 
     context 'invalid' do
       let(:raw_body) { double(to_hash: { key: 'value' }, to_string: '') }
-      let(:raw) { double(method: 'method', path: 'path', content_type: 'application/json', body: raw_body) }
+      let(:raw) { double(method: 'method', path: 'path', raw_path: 'path', content_type: 'application/json', body: raw_body) }
       let(:message) do
-        { method: 'method', path: 'path', content_type: 'application/json',
+        { method: 'method', path: 'path', raw_path: 'path', content_type: 'application/json',
           body: { key: 'value' }, error: ['error'] }
       end
       before { allow(JSON::Validator).to receive(:fully_validate).and_return(['error']) }
@@ -24,8 +24,8 @@ RSpec.describe Esplanade::Request::Validation do
       let(:content_type) { 'multipart/form-data' }
       let(:doc) { double(method: 'method', path: 'path', content_type: content_type) }
       let(:raw_body) { double(to_hash: { key: 'value' }, to_string: '') }
-      let(:raw) { double(method: 'method', path: 'path', content_type: content_type, body: raw_body) }
-      let(:message) { { method: 'method', path: 'path', content_type: content_type } }
+      let(:raw) { double(method: 'method', path: 'path', raw_path: 'path', content_type: content_type, body: raw_body) }
+      let(:message) { { method: 'method', path: 'path', raw_path: 'path', content_type: content_type } }
       it { expect { subject.valid! }.to raise_error(Esplanade::Request::ContentTypeIsNotJson, message.to_s) }
     end
   end
