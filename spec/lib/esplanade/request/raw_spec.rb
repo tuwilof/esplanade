@@ -16,5 +16,12 @@ RSpec.describe Esplanade::Request::Raw do
     it { expect(subject.path).to eq(path) }
   end
 
+  describe '#content-type' do
+    context 'content-Type contain additional parameters' do
+      let(:env) { { 'CONTENT_TYPE' => 'application/json; encoding=utf8' } }
+      it { expect(subject.content_type).to eq('application/json') }
+    end
+  end
+
   describe { it { expect(subject.body).to be_a(Esplanade::Request::Raw::Body) } }
 end

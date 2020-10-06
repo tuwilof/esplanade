@@ -135,6 +135,8 @@ Error message format:
 
 #### Esplanade::Request::BodyIsNotJson
 
+Throws an error also when the body is empty and equal nil.
+
 Error message format:
 
 ```ruby
@@ -165,6 +167,20 @@ Error message format:
 ### Esplanade::Response::Error
 
 Parent class for those described below. Inherited from `Esplanade::Error`.
+
+#### Esplanade::Response::PrefixNotMatch
+
+Error message format: 
+
+```ruby
+{
+  :request => {
+    :method => "method",
+    :path => "path"
+  },
+  :status => "status"
+}
+```
 
 #### Esplanade::Response::NotDocumented
 
