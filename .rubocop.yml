@@ -1,8 +1,9 @@
 AllCops:
-  TargetRubyVersion: 2.2
+  NewCops: enable
+  TargetRubyVersion: 2.4
 
-Metrics/LineLength:
-  Max: 120
+Layout/LineLength:
+  Enabled: false
 
 Style/Documentation:
   Enabled: false
@@ -11,6 +12,12 @@ Style/FrozenStringLiteralComment:
   Enabled: false
 
 Metrics/BlockLength:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
+Metrics/MethodLength:
   Enabled: false
 
 Style/IfUnlessModifier:

@@ -8,20 +8,20 @@ RSpec.describe Esplanade::Request::Doc do
   describe '#tomogram' do
     let(:tomogram) { double }
     let(:main_documentation) { double(find_request_with_content_type: tomogram, prefix_match?: true) }
-    let(:raw) { double(method: double, path: double, content_type: double) }
+    let(:raw) { double(method: double, path: double, query: double, content_type: double) }
     it { expect(subject.tomogram).to eq(tomogram) }
 
     context 'prefix not match' do
       let(:main_documentation) { double(prefix_match?: false) }
-      let(:raw) { double(method: 'method', path: 'path', content_type: 'content_type') }
-      let(:message) { '{:method=>"method", :path=>"path", :content_type=>"content_type"}' }
+      let(:raw) { double(method: 'method', path: 'path', raw_path: 'path', content_type: 'content_type') }
+      let(:message) { '{:method=>"method", :path=>"path", :raw_path=>"path", :content_type=>"content_type"}' }
       it { expect { subject.tomogram }.to raise_error(Esplanade::Request::PrefixNotMatch, message) }
     end
 
     context 'request not documented' do
       let(:tomogram) { nil }
-      let(:raw) { double(method: 'method', path: 'path', content_type: 'content_type') }
-      let(:message) { '{:method=>"method", :path=>"path", :content_type=>"content_type"}' }
+      let(:raw) { double(method: 'method', path: 'path', raw_path: 'path', content_type: 'content_type') }
+      let(:message) { '{:method=>"method", :path=>"path", :raw_path=>"path", :content_type=>"content_type"}' }
       it { expect { subject.tomogram }.to raise_error(Esplanade::Request::NotDocumented, message) }
     end
   end
@@ -52,7 +52,7 @@ RSpec.describe Esplanade::Request::Doc do
     context 'request not documented' do
       before do
         allow(subject).to receive(:tomogram).and_raise(
-          Esplanade::Request::NotDocumented.new(method: 'method', path: 'path', content_type: 'content_type')
+          Esplanade::Request::NotDocumented.new(method: 'method', path: 'path', raw_path: 'path', content_type: 'content_type')
         )
       end
       it { expect(subject.responses).to eq([]) }

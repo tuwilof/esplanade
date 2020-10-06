@@ -100,8 +100,9 @@ Error message format:
 
 ```ruby
 {
-  :method => "method", 
-  :path => "path", 
+  :method => "method",
+  :path => "path",
+  :raw_path => "path",
   :content_type => "content_type"
 }
 ```
@@ -114,6 +115,7 @@ Error message format:
 {
   :method => "method",
   :path => "path",
+  :raw_path => "path",
   :content_type => "content_type"
 }
 ```
@@ -126,11 +128,14 @@ Error message format:
 {
   :method => "method",
   :path => "path",
+  :raw_path => "path",
   :content_type => "content_type"
 }
 ```
 
 #### Esplanade::Request::BodyIsNotJson
+
+Throws an error also when the body is empty and equal nil.
 
 Error message format:
 
@@ -138,6 +143,7 @@ Error message format:
 {
   :method => "method",
   :path => "path",
+  :raw_path => "path",
   :content_type => "content_type",
   :body => "body"
 }
@@ -151,6 +157,7 @@ Error message format:
 {
   :method => "method",
   :path => "path",
+  :raw_path => "path",
   :content_type => "content_type",
   :body => "body",
   :error => ["error"]
@@ -161,6 +168,20 @@ Error message format:
 
 Parent class for those described below. Inherited from `Esplanade::Error`.
 
+#### Esplanade::Response::PrefixNotMatch
+
+Error message format: 
+
+```ruby
+{
+  :request => {
+    :method => "method",
+    :path => "path"
+  },
+  :status => "status"
+}
+```
+
 #### Esplanade::Response::NotDocumented
 
 Error message format:
@@ -169,7 +190,8 @@ Error message format:
 {
   :request => {
     :method => "method",
-    :path => "path"
+    :path => "path",
+    :raw_path => "path"
   },
   :status => "status"
 }
@@ -185,7 +207,8 @@ Error message format:
 {
   :request => {
     :method => "method",
-    :path => "path"
+    :path => "path",
+    :raw_path => "path"
   },
   :status => "status",
   :body => "body"
@@ -200,7 +223,8 @@ Error message format:
 {
   :request => {
     :method => "method",
-    :path => "path"
+    :path => "path",
+    :raw_path => "path"
   },
   :status => "status",
   :body => "body",
