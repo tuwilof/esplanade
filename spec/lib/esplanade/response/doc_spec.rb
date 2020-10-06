@@ -13,13 +13,13 @@ RSpec.describe Esplanade::Response::Doc do
     it { expect(subject.tomogram).to eq([tomogram]) }
 
     context 'prefix not match' do
-      let(:request) { double(raw: double(method: 'method', path: 'path')) }
+      let(:request) { double(doc: double(responses: []), raw: double(method: 'method', path: 'path', raw_path: 'path')) }
       let(:raw_status) { 'status' }
-      let(:message) { '{:request=>{:method=>"method", :path=>"path"}, :status=>"status"}' }
+      let(:message) { {:request=>{:method=>"method", :path=>"path", :raw_path=>"path"}, :status=>"status"} }
 
       before { allow(request).to receive_message_chain(:doc, :responses).and_raise(Esplanade::Request::PrefixNotMatch) }
 
-      it { expect { subject.tomogram }.to raise_error(Esplanade::Response::PrefixNotMatch, message) }
+      it { expect { subject.tomogram }.to raise_error(Esplanade::Response::PrefixNotMatch) }
     end
 
     context 'responses are empty' do
