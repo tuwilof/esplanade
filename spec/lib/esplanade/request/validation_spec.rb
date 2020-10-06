@@ -21,7 +21,7 @@ RSpec.describe Esplanade::Request::Validation do
     end
 
     context 'content-type is not json' do
-      let(:content_type) { 'multipart/form-data;boundary=BOUNDARY' }
+      let(:content_type) { 'multipart/form-data' }
       let(:doc) { double(method: 'method', path: 'path', content_type: content_type) }
       let(:raw_body) { double(to_hash: { key: 'value' }, to_string: '') }
       let(:raw) { double(method: 'method', path: 'path', content_type: content_type, body: raw_body) }
