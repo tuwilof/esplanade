@@ -15,12 +15,16 @@ module Esplanade
         @path ||= @env['PATH_INFO']
       end
 
+      def raw_path
+        @raw_path ||= "#{@env['PATH_INFO']}/#{@env['QUERY_STRING']}"
+      end
+
       def body
         @body ||= Body.new(self, @env)
       end
 
       def content_type
-        @content_type ||= @env['CONTENT_TYPE']
+        @content_type ||= @env['CONTENT_TYPE'].to_s.split(';').first
       end
     end
   end

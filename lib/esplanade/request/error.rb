@@ -5,9 +5,10 @@ module Esplanade
     class PrefixNotMatch < Error; end
 
     class NotDocumented < Error
-      def initialize(method:, path:, content_type:)
+      def initialize(method:, path:, raw_path:, content_type:)
         @method = method
         @path = path
+        @raw_path = raw_path
         @content_type = content_type
 
         super(to_hash)
@@ -17,14 +18,16 @@ module Esplanade
         {
           method: @method,
           path: @path,
+          raw_path: @raw_path,
           content_type: @content_type
         }
       end
     end
 
     class ContentTypeIsNotJson < Error
-      def initialize(method:, path:, content_type:)
+      def initialize(method:, path:, raw_path:, content_type:)
         @method = method
+        @raw_path = raw_path
         @path = path
         @content_type = content_type
 
@@ -35,15 +38,17 @@ module Esplanade
         {
           method: @method,
           path: @path,
+          raw_path: @raw_path,
           content_type: @content_type
         }
       end
     end
 
     class BodyIsNotJson < Error
-      def initialize(method:, path:, content_type:, body:)
+      def initialize(method:, path:, raw_path:, content_type:, body:)
         @method = method
         @path = path
+        @raw_path = raw_path
         @content_type = content_type
         @body = body
 
@@ -54,6 +59,7 @@ module Esplanade
         {
           method: @method,
           path: @path,
+          raw_path: @raw_path,
           content_type: @content_type,
           body: @body
         }
@@ -61,9 +67,10 @@ module Esplanade
     end
 
     class Invalid < Error
-      def initialize(method:, path:, content_type:, body:, error:)
+      def initialize(method:, path:, raw_path:, content_type:, body:, error:)
         @method = method
         @path = path
+        @raw_path = raw_path
         @content_type = content_type
         @body = body
         @error = error
@@ -75,6 +82,7 @@ module Esplanade
         {
           method: @method,
           path: @path,
+          raw_path: @raw_path,
           content_type: @content_type,
           body: @body,
           error: @error
