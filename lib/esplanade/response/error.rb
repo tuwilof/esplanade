@@ -2,6 +2,8 @@ module Esplanade
   class Response
     class Error < Esplanade::Error; end
 
+    class PrefixNotMatch < Error; end
+
     class NotDocumented < Error
       def initialize(request:, status:)
         @method = request[:method]
