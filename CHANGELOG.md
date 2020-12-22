@@ -1,5 +1,10 @@
 # Change log
 
+### 1.7.0 - 2020-12-22
+
+* improvements
+  * changed middleware arguments
+
 ### 1.6.0 - 2020-10-12
 
 * features

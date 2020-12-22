@@ -15,7 +15,7 @@ RSpec.describe Esplanade::Response::Doc do
     context 'prefix not match' do
       let(:request) { double(doc: double(responses: []), raw: double(method: 'method', path: 'path', raw_path: 'path')) }
       let(:raw_status) { 'status' }
-      let(:message) { {:request=>{:method=>"method", :path=>"path", :raw_path=>"path"}, :status=>"status"} }
+      let(:message) { { request: { method: 'method', path: 'path', raw_path: 'path' }, status: 'status' } }
 
       before { allow(request).to receive_message_chain(:doc, :responses).and_raise(Esplanade::Request::PrefixNotMatch) }
 

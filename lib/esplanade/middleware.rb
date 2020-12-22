@@ -4,18 +4,9 @@ require 'esplanade/response'
 
 module Esplanade
   class Middleware
-    def initialize(
-      app,
-      prefix: Esplanade.configuration.prefix,
-      apib_path: Esplanade.configuration.apib_path,
-      drafter_yaml_path: Esplanade.configuration.drafter_yaml_path
-    )
+    def initialize(app, **params)
       @app = app
-      @documentation = Tomograph::Tomogram.new(
-        prefix: prefix,
-        apib_path: apib_path,
-        drafter_yaml_path: drafter_yaml_path
-      )
+      @documentation = Tomograph::Tomogram.new(Esplanade.configuration.params.merge(params))
     end
 
     def call(env)
