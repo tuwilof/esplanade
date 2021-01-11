@@ -4,7 +4,7 @@ RSpec.describe Esplanade do
   context 'if not default' do
     it 'makes settings' do
       Esplanade.configure do |config|
-        config.drafter_yaml_path = 'doc/api.yaml'
+        config.params = { prefix: 'doc/api.yaml' }
       end
     end
   end
@@ -12,7 +12,7 @@ RSpec.describe Esplanade do
   context 'if default' do
     it 'makes settings' do
       Esplanade.configure do |config|
-        config.prefix = '/api/v1'
+        config.params = { prefix: '/api/v1' }
       end
     end
   end

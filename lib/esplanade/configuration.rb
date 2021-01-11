@@ -1,11 +1,9 @@
 module Esplanade
   class Configuration
-    attr_accessor :apib_path,
-                  :drafter_yaml_path,
-                  :prefix
+    attr_accessor :params
 
     def initialize
-      @prefix = ''
+      @params = {}
     end
   end
 end
