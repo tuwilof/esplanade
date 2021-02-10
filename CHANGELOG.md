@@ -1,5 +1,10 @@
 # Change log
 
+### 1.7.1 - 2021-02-10
+
+* setting
+  * improve gemspec dependency for tomograph
+
 ### 1.7.0 - 2020-12-22
 
 * improvements
