@@ -19,8 +19,8 @@ module Esplanade
         @tomogram
       end
 
-      def json_schema
-        @json_schema ||= tomogram.request
+      def json_schemas
+        @json_schemas ||= tomogram.requests
       end
 
       def method
@@ -47,6 +47,7 @@ module Esplanade
         {
           method: @raw.method,
           path: @raw.path,
+          raw_path: @raw.raw_path,
           content_type: @raw.content_type
         }
       end

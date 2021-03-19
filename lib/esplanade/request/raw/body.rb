@@ -37,6 +37,7 @@ module Esplanade
           {
             method: @raw_request.method,
             path: @raw_request.path,
+            raw_path: @raw_request.raw_path,
             content_type: @raw_request.content_type,
             body: reduced_version
           }

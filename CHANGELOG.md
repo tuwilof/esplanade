@@ -1,5 +1,24 @@
 # Change log
 
+### 1.7.1 - 2021-02-10
+
+* setting
+  * improve gemspec dependency for tomograph
+
+### 1.7.0 - 2020-12-22
+
+* improvements
+  * changed middleware arguments
+
+### 1.6.0 - 2020-10-12
+
+* features
+  * in the errors write not only a documented path but also a raw [#11](https://github.com/funbox/esplanade/issues/11)
+  * write in the documentation that the body is empty and nil is skipped [#13](https://github.com/funbox/esplanade/issues/13)
+  * redefine error PrefixNotMatch for response [#17](https://github.com/funbox/esplanade/issues/17)
+  * content-type can contain additional parameters [#21](https://github.com/funbox/esplanade/issues/21)
+  * update esplanade for the new tomograph [#29](https://github.com/funbox/esplanade/issues/29)
+
 ### 1.5.0 - 2020-04-07
 
 * improvements

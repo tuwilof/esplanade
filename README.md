@@ -1,7 +1,6 @@
 # Esplanade
 
 [![Gem Version](https://badge.fury.io/rb/esplanade.svg)](https://badge.fury.io/rb/esplanade)
-[![Build Status](https://travis-ci.org/funbox/esplanade.svg?branch=master)](https://travis-ci.org/funbox/esplanade)
 
 This gem helps you to validate and synchronize your API in strict accordance to the documentation in
 [API Blueprint](https://apiblueprint.org/) format.
@@ -58,7 +57,7 @@ $ gem install esplanade
 `config/application.rb`:
 
 ```ruby
-config.middleware.use Esplanade::SafeMiddleware, apib_path: 'doc.apib'
+config.middleware.use Esplanade::SafeMiddleware, drafter_yaml_path: 'doc.yaml'
 ```
 
 ## Middlewares
@@ -73,7 +72,7 @@ It throws errors, so you should add your own middleware for processing.
 
 ```ruby
 config.middleware.use YourMiddleware
-config.middleware.use Esplanade::DangerousMiddleware, apib_path: 'doc.apib'
+config.middleware.use Esplanade::DangerousMiddleware, drafter_yaml_path: 'doc.yaml'
 ```
 
 ### Esplanade::CheckCustomResponseMiddleware
@@ -81,9 +80,9 @@ config.middleware.use Esplanade::DangerousMiddleware, apib_path: 'doc.apib'
 Use it if you want to be sure that you have documented new custom responses.
 
 ```ruby
-config.middleware.use Esplanade::CheckCustomResponseMiddleware, apib_path: 'doc.apib'
+config.middleware.use Esplanade::CheckCustomResponseMiddleware, drafter_yaml_path: 'doc.yaml'
 config.middleware.use YourMiddleware
-config.middleware.use Esplanade::DangerousMiddleware, apib_path: 'doc.apib'
+config.middleware.use Esplanade::DangerousMiddleware, drafter_yaml_path: 'doc.yaml'
 ```
 
 ## Esplanade::Error
@@ -96,12 +95,13 @@ Parent class for those described below. Inherited from `Esplanade::Error`.
 
 #### Esplanade::Request::PrefixNotMatch
 
-Error message format: 
+Error message format:
 
 ```ruby
 {
-  :method => "method", 
-  :path => "path", 
+  :method => "method",
+  :path => "path",
+  :raw_path => "path",
   :content_type => "content_type"
 }
 ```
@@ -114,6 +114,7 @@ Error message format:
 {
   :method => "method",
   :path => "path",
+  :raw_path => "path",
   :content_type => "content_type"
 }
 ```
@@ -126,11 +127,14 @@ Error message format:
 {
   :method => "method",
   :path => "path",
+  :raw_path => "path",
   :content_type => "content_type"
 }
 ```
 
 #### Esplanade::Request::BodyIsNotJson
+
+Throws an error also when the body is empty and equal nil.
 
 Error message format:
 
@@ -138,6 +142,7 @@ Error message format:
 {
   :method => "method",
   :path => "path",
+  :raw_path => "path",
   :content_type => "content_type",
   :body => "body"
 }
@@ -151,6 +156,7 @@ Error message format:
 {
   :method => "method",
   :path => "path",
+  :raw_path => "path",
   :content_type => "content_type",
   :body => "body",
   :error => ["error"]
@@ -161,7 +167,7 @@ Error message format:
 
 Parent class for those described below. Inherited from `Esplanade::Error`.
 
-#### Esplanade::Response::NotDocumented
+#### Esplanade::Response::PrefixNotMatch
 
 Error message format:
 
@@ -170,6 +176,21 @@ Error message format:
   :request => {
     :method => "method",
     :path => "path"
+  },
+  :status => "status"
+}
+```
+
+#### Esplanade::Response::NotDocumented
+
+Error message format:
+
+```ruby
+{
+  :request => {
+    :method => "method",
+    :path => "path",
+    :raw_path => "path"
   },
   :status => "status"
 }
@@ -185,7 +206,8 @@ Error message format:
 {
   :request => {
     :method => "method",
-    :path => "path"
+    :path => "path",
+    :raw_path => "path"
   },
   :status => "status",
   :body => "body"
@@ -200,7 +222,8 @@ Error message format:
 {
   :request => {
     :method => "method",
-    :path => "path"
+    :path => "path",
+    :raw_path => "path"
   },
   :status => "status",
   :body => "body",
@@ -210,17 +233,7 @@ Error message format:
 
 ## Middleware args
 
-### `apib_path`
-
-Path to API Blueprint documentation. There must be an installed [drafter](https://github.com/apiaryio/drafter) to parse it.
-
-### `drafter_yaml_path`
-
-Path to API Blueprint documentation pre-parsed with `drafter` and saved to a YAML file.
-
-### `prefix`
-
-Prefix for API requests. Example: `'/api'`. The prefix is added to the requests in the documentation.
+Support any [tomograph constructor-params](https://github.com/funbox/tomograph/tree/master#constructor-params)
 
 ## License
 

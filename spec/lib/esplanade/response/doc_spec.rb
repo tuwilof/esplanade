@@ -12,18 +12,28 @@ RSpec.describe Esplanade::Response::Doc do
     let(:request) { double(doc: double(responses: [tomogram])) }
     it { expect(subject.tomogram).to eq([tomogram]) }
 
-    context 'responses are empty' do
-      let(:request) { double(doc: double(responses: []), raw: double(method: 'method', path: 'path')) }
+    context 'prefix not match' do
+      let(:request) { double(doc: double(responses: []), raw: double(method: 'method', path: 'path', raw_path: 'path')) }
       let(:raw_status) { 'status' }
-      let(:message) { '{:request=>{:method=>"method", :path=>"path"}, :status=>"status"}' }
+      let(:message) { { request: { method: 'method', path: 'path', raw_path: 'path' }, status: 'status' } }
+
+      before { allow(request).to receive_message_chain(:doc, :responses).and_raise(Esplanade::Request::PrefixNotMatch) }
+
+      it { expect { subject.tomogram }.to raise_error(Esplanade::Response::PrefixNotMatch) }
+    end
+
+    context 'responses are empty' do
+      let(:request) { double(doc: double(responses: []), raw: double(method: 'method', path: 'path', raw_path: 'path')) }
+      let(:raw_status) { 'status' }
+      let(:message) { '{:request=>{:method=>"method", :path=>"path", :raw_path=>"path"}, :status=>"status"}' }
       it { expect { subject.tomogram }.to raise_error(Esplanade::Response::NotDocumented, message) }
     end
 
     context 'response not documented' do
       let(:tomogram) { { 'status' => double } }
       let(:raw_status) { 'status' }
-      let(:request) { double(doc: double(responses: [tomogram]), raw: double(method: 'method', path: 'path')) }
-      let(:message) { '{:request=>{:method=>"method", :path=>"path"}, :status=>"status"}' }
+      let(:request) { double(doc: double(responses: [tomogram]), raw: double(method: 'method', path: 'path', raw_path: 'path')) }
+      let(:message) { '{:request=>{:method=>"method", :path=>"path", :raw_path=>"path"}, :status=>"status"}' }
       it { expect { subject.tomogram }.to raise_error(Esplanade::Response::NotDocumented, message) }
     end
   end
