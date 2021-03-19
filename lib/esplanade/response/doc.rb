@@ -11,8 +11,6 @@ module Esplanade
         raise NotDocumented.new(**message) if @tomogram == []
 
         @tomogram
-      rescue Esplanade::Request::PrefixNotMatch
-        raise PrefixNotMatch.new(**message)
       end
 
       def json_schemas
