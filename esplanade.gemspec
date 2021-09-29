@@ -17,12 +17,11 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_runtime_dependency 'json-schema', '~> 2.6', '>= 2.6.2'
-  spec.add_runtime_dependency 'multi_json', '~> 1.11', '>= 1.11.1'
   spec.add_runtime_dependency 'tomograph', '~> 3.1', '>= 3.1.0'
-  spec.add_development_dependency 'byebug', '>= 10.0.0'
-  spec.add_development_dependency 'rake', '~> 13'
-  spec.add_development_dependency 'rspec', '~> 3.9', '>= 3.9.0'
-  spec.add_development_dependency 'rubocop', '~> 0.81', '>= 0.81.0'
-  spec.add_development_dependency 'simplecov', '~> 0.18', '>= 0.18'
+  spec.add_development_dependency 'byebug', '~> 11.1', '>= 11.1.3'
+  spec.add_development_dependency 'rake', '~> 13.0', '>= 13.0.6'
+  spec.add_development_dependency 'rspec', '~> 3.10'
+  spec.add_development_dependency 'rubocop', '~> 1.22.0'
+  spec.add_development_dependency 'simplecov', '~> 0.21'
   spec.required_ruby_version = '>= 2.4.0'
 end

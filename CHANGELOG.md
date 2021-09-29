@@ -1,5 +1,10 @@
 # Change log
 
+### 1.8.0 - 2021-09-29
+
+* patch
+  * remove multi_json
+
 ### 1.7.1 - 2021-02-10
 
 * setting

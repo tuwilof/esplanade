@@ -1,5 +1,3 @@
-require 'multi_json'
-
 module Esplanade
   class Response
     class Raw
@@ -16,8 +14,8 @@ module Esplanade
         end
 
         def to_hash
-          @hash ||= MultiJson.load(to_string)
-        rescue MultiJson::ParseError
+          @hash ||= JSON.parse(to_string)
+        rescue JSON::ParserError
           raise BodyIsNotJson.new(**message)
         end
 
