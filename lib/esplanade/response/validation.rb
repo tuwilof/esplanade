@@ -29,10 +29,10 @@ module Esplanade
           res = JSON::Validator.fully_validate(json_schema, @raw.body.to_hash)
           break res if res == []
         end
-        if main_res != []
-          ['invalid']
-        else
+        if main_res == []
           []
+        else
+          ['invalid']
         end
       end
 
