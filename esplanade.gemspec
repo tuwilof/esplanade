@@ -9,6 +9,7 @@ Gem::Specification.new do |spec|
   spec.email          = ['d.efimov@fun-box.ru']
 
   spec.summary        = 'Validate requests and responses against API Blueprint specifications'
+  spec.homepage       = 'https://github.com/matchtechnologies/esplanade'
   spec.license        = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
