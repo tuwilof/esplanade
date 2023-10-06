@@ -1,7 +1,5 @@
 # Esplanade
 
-[![Gem Version](https://badge.fury.io/rb/esplanade.svg)](https://badge.fury.io/rb/esplanade)
-
 This gem helps you to validate and synchronize your API in strict accordance to the documentation in
 [API Blueprint](https://apiblueprint.org/) format.
 To do this it automatically searches received requests and responses in the documentation and run
