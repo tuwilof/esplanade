@@ -1,7 +1,7 @@
 # Esplanade
 
 This gem helps you to validate and synchronize your API in strict accordance to the documentation in
-[API Blueprint](https://apiblueprint.org/) and OpenAPI formats.
+[API Blueprint](https://apiblueprint.org/) and [OpenAPI](https://www.openapis.org/) formats.
 To do this it automatically searches received requests and responses in the documentation and run
 JSON-schemas validators.
 
