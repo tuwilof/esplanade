@@ -1,7 +1,7 @@
 # Esplanade
 
 This gem helps you to validate and synchronize your API in strict accordance to the documentation in
-[API Blueprint](https://apiblueprint.org/) format.
+[API Blueprint](https://apiblueprint.org/) and OpenAPI formats.
 To do this it automatically searches received requests and responses in the documentation and run
 JSON-schemas validators.
 
@@ -217,7 +217,7 @@ Error message format:
 
 ## Middleware args
 
-Support any [tomograph constructor-params](https://github.com/funbox/tomograph/tree/master#constructor-params)
+Support any [tomograph constructor-params](https://github.com/tuwilof/tomograph/tree/master#constructor-params)
 
 ## License
 
