@@ -1,5 +1,10 @@
 # Change log
 
+### 1.8.2 - 2024-04-03
+
+* patch
+  * change home page
+
 ### 1.8.1 - 2023-10-06
 
 * patch
