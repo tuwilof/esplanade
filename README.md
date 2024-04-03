@@ -223,4 +223,4 @@ Support any [tomograph constructor-params](https://github.com/funbox/tomograph/t
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
-[![Sponsored by FunBox](https://funbox.ru/badges/sponsored_by_funbox_centered.svg)](https://funbox.ru)
+[Sponsored by FunBox](https://funbox.ru)
