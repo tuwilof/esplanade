@@ -1,5 +1,11 @@
 # Change log
 
+### 1.8.3 - 2024-12-06
+
+* patch
+  * fix the non-json check of the request body if the schema is less than one
+  * delete homepage for fix
+
 ### 1.8.2 - 2024-04-03
 
 * patch
