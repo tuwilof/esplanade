@@ -1,5 +1,10 @@
 # Change log
 
+### 1.8.4 - 2024-12-06
+
+* patch
+  * fix email and author
+
 ### 1.8.3 - 2024-12-06
 
 * patch

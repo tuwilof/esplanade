@@ -5,8 +5,8 @@ require 'esplanade/version'
 Gem::Specification.new do |spec|
   spec.name           = 'esplanade'
   spec.version        = Esplanade::VERSION
-  spec.authors        = ['d.efimov']
-  spec.email          = ['d.efimov@fun-box.ru']
+  spec.authors        = ['tuwilof']
+  spec.email          = ['tuwilof@gmail.com']
 
   spec.summary        = 'Validate requests and responses against API Blueprint specifications'
   spec.license        = 'MIT'
