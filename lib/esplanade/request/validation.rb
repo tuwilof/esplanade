@@ -12,7 +12,7 @@ module Esplanade
       def valid!
         raise ContentTypeIsNotJson.new(**mini_message) unless @doc.content_type == 'application/json'
 
-        @error ||= if @doc.json_schemas.size == 1
+        @error ||= if @doc.json_schemas.size <= 1
                      one_json_schema
                    else
                      more_than_one_json_schema
