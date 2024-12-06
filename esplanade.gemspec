@@ -11,6 +11,14 @@ Gem::Specification.new do |spec|
   spec.summary        = 'Validate requests and responses against API Blueprint specifications'
   spec.license        = 'MIT'
 
+  spec.homepage       = 'https://github.com/tuwilof/esplanade'
+  spec.metadata = {
+    "source_code_uri" => "https://github.com/tuwilof/esplanade",
+    "bug_tracker_uri" => "https://github.com/tuwilof/esplanade/issues",
+    "documentation_uri" => "https://github.com/tuwilof/esplanade/blob/master/README.md",
+    "homepage_uri" => "https://github.com/tuwilof/esplanade"
+    }
+
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = 'exe'
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
